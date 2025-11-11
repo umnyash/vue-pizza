@@ -164,14 +164,12 @@ import {
   normalizeIngredient,
   normalizeSauce,
 } from "@/common/helpers/normalize";
+import { getImage } from "@/common/helpers/getImage";
 
 const doughs = doughJSON.map(normalizeDough);
 const ingredients = ingredientsJSON.map(normalizeIngredient);
 const sauces = saucesJSON.map(normalizeSauce);
 const sizes = sizesJSON.map(normalizeSize);
-
-const getImage = (image) =>
-  new URL(`src/assets/img/${image}`, new URL(import.meta.url).origin).href;
 </script>
 
 <style lang="scss">
