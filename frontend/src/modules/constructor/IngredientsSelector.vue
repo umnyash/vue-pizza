@@ -17,12 +17,28 @@
           <button
             type="button"
             class="counter__button counter__button--minus"
-            disabled
+            :disabled="getIngredientCount(ingredient.value) === IngredientCount.Min"
+            @click="decrementIngredientCount(ingredient.value)"
           >
             <span class="visually-hidden">Меньше</span>
           </button>
-          <input type="text" name="counter" class="counter__input" value="0" />
-          <button type="button" class="counter__button counter__button--plus">
+          <input
+            type="text"
+            name="counter"
+            class="counter__input"
+            :value="getIngredientCount(ingredient.value)"
+            @input="
+              handleCountFieldInput(ingredient.value, $event.target.value)
+            "
+          />
+          <button
+            type="button"
+            class="counter__button counter__button--plus"
+            :disabled="
+              getIngredientCount(ingredient.value) === IngredientCount.Max
+            "
+            @click="incrementIngredientCount(ingredient.value)"
+          >
             <span class="visually-hidden">Больше</span>
           </button>
         </div>
@@ -32,14 +48,48 @@
 </template>
 
 <script setup>
+import { IngredientCount } from "@/common/enums";
 import { getImage } from "@/common/helpers/getImage";
 
-defineProps({
+const props = defineProps({
   ingredients: {
     type: Array,
     required: true,
   },
+  ingredientsCounts: {
+    type: Object,
+    default: () => ({}),
+  },
 });
+
+const emit = defineEmits(["change"]);
+
+const emitChangeEvent = (ingredient, count) => {
+  emit("change", ingredient, count);
+};
+
+const getIngredientCount = (ingredient) =>
+  props.ingredientsCounts[ingredient] ?? IngredientCount.Min;
+
+const handleCountFieldInput = (ingredient, count) => {
+  const normalizedCount = parseInt(count) || IngredientCount.Min;
+
+  emitChangeEvent(
+    ingredient,
+    Math.max(
+      Math.min(normalizedCount, IngredientCount.Max),
+      IngredientCount.Min,
+    ),
+  );
+};
+
+const incrementIngredientCount = (ingredient) => {
+  emitChangeEvent(ingredient, getIngredientCount(ingredient) + 1);
+};
+
+const decrementIngredientCount = (ingredient) => {
+  emitChangeEvent(ingredient, getIngredientCount(ingredient) - 1);
+};
 </script>
 
 <style lang="scss" scoped>
