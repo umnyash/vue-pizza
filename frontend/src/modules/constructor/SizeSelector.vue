@@ -15,7 +15,8 @@
             name="diameter"
             :value="size.value"
             class="visually-hidden"
-            :checked="size.multiplier === 2"
+            :checked="size.value === modelValue"
+            @input="emit('update:modelValue', size.value)"
           />
           <span>{{ size.name }}</span>
         </label>
@@ -30,7 +31,13 @@ defineProps({
     type: Array,
     required: true,
   },
+  modelValue: {
+    type: String,
+    default: "",
+  },
 });
+
+const emit = defineEmits(["update:modelValue"]);
 </script>
 
 <style lang="scss" scoped>

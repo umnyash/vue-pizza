@@ -11,7 +11,8 @@
         type="radio"
         name="sauce"
         :value="sauce.value"
-        :checked="sauce.id === 1"
+        :checked="sauce.value === modelValue"
+        @input="emit('update:modelValue', sauce.value)"
       />
       <span>{{ sauce.name }}</span>
     </label>
@@ -24,7 +25,13 @@ defineProps({
     type: Array,
     required: true,
   },
+  modelValue: {
+    type: String,
+    default: "",
+  },
 });
+
+const emit = defineEmits(["update:modelValue"]);
 </script>
 
 <style lang="scss" scoped>

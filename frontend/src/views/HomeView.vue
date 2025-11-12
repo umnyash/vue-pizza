@@ -3,8 +3,8 @@
     <form action="#" method="post">
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
-        <dough-selector :doughs="doughs" />
-        <size-selector :sizes="sizes" />
+        <dough-selector v-model="pizza.dough" :doughs="doughs" />
+        <size-selector v-model="pizza.size" :sizes="sizes" />
 
         <div class="content__ingredients">
           <div class="sheet">
@@ -13,8 +13,12 @@
             </h2>
 
             <div class="sheet__content ingredients">
-              <sauce-selector :sauces="sauces" />
-              <ingredients-selector :ingredients="ingredients" />
+              <sauce-selector v-model="pizza.sauce" :sauces="sauces" />
+              <ingredients-selector
+                :ingredients="ingredients"
+                :ingredients-counts="pizza.ingredientsCounts"
+                @change="updateIngredientsCounts"
+              />
             </div>
           </div>
         </div>
@@ -23,6 +27,7 @@
           <label class="input">
             <span class="visually-hidden">Название пиццы</span>
             <input
+              v-model="pizza.name"
               type="text"
               name="pizza_name"
               placeholder="Введите название пиццы"
@@ -42,6 +47,7 @@
 </template>
 
 <script setup>
+import { reactive } from "vue";
 import doughJSON from "@/mocks/dough.json";
 import ingredientsJSON from "@/mocks/ingredients.json";
 import saucesJSON from "@/mocks/sauces.json";
@@ -64,6 +70,36 @@ const doughs = doughJSON.map(normalizeDough);
 const ingredients = ingredientsJSON.map(normalizeIngredient);
 const sauces = saucesJSON.map(normalizeSauce);
 const sizes = sizesJSON.map(normalizeSize);
+
+const pizza = reactive({
+  name: "",
+  dough: doughs[0].value,
+  size: sizes[1].value,
+  sauce: sauces[0].value,
+  ingredientsCounts: {},
+});
+
+const updateIngredientsCounts = (ingredient, count) => {
+  /*
+    A technique is used to overwrite the entire object to fix the problem
+    where the user repeatedly enters a quantity greater than the maximum,
+    which is always saved as the maximum quantity and the component is not updated.
+
+    For example, the current quantity is equal to the maximum (3),
+    then the user enters 33, which is saved as the same 3,
+    and the value 33 remains in the interface.
+  */
+
+  const currentIngredientsCounts = { ...pizza.ingredientsCounts };
+
+  if (count) {
+    currentIngredientsCounts[ingredient] = count;
+  } else {
+    delete currentIngredientsCounts[ingredient];
+  }
+
+  pizza.ingredientsCounts = currentIngredientsCounts;
+};
 </script>
 
 <style lang="scss">

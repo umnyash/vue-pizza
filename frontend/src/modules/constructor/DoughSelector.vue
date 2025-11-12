@@ -3,17 +3,14 @@
     <div class="sheet">
       <h2 class="title title--small sheet__title">Выберите тесто</h2>
       <div class="sheet__content dough">
-        <label
-          v-for="(dough, index) of doughs"
-          :key="dough.id"
-          class="dough__input"
-        >
+        <label v-for="dough of doughs" :key="dough.id" class="dough__input">
           <input
             type="radio"
             name="dough"
             :value="dough.value"
             class="visually-hidden"
-            :checked="index === 0"
+            :checked="dough.value === modelValue"
+            @input="emit('update:modelValue', dough.value)"
           />
           <img :src="getImage(dough.image)" :alt="dough.name" />
           <b>{{ dough.name }}</b>
@@ -32,7 +29,13 @@ defineProps({
     type: Array,
     required: true,
   },
+  modelValue: {
+    type: String,
+    default: "",
+  },
 });
+
+const emit = defineEmits(["update:modelValue"]);
 </script>
 
 <style lang="scss" scoped>
