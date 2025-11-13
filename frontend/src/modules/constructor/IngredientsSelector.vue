@@ -8,10 +8,17 @@
         :key="ingredient.id"
         class="ingredients__item"
       >
-        <div class="filling">
-          <img :src="getImage(ingredient.image)" :alt="ingredient.name" />
-          {{ ingredient.name }}
-        </div>
+        <app-drag
+          :data-transfer="ingredient.value"
+          :draggable="
+            getIngredientCount(ingredient.value) < IngredientCount.Max
+          "
+        >
+          <div class="filling">
+            <img :src="getImage(ingredient.image)" :alt="ingredient.name" />
+            {{ ingredient.name }}
+          </div>
+        </app-drag>
 
         <div class="counter counter--orange ingredients__counter">
           <button
@@ -50,6 +57,7 @@
 <script setup>
 import { IngredientCount } from "@/common/enums";
 import { getImage } from "@/common/helpers/getImage";
+import AppDrag from "@/common/components/AppDrag.vue";
 
 const props = defineProps({
   ingredients: {
@@ -293,6 +301,7 @@ const decrementIngredientCount = (ingredient) => {
     padding: 4px;
 
     border-radius: 50%;
+    pointer-events: none;
   }
 }
 </style>

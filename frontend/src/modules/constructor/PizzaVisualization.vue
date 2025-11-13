@@ -1,24 +1,27 @@
 <template>
   <div class="content__constructor">
-    <div class="pizza" :class="`pizza--foundation--${dough}-${sauce}`">
-      <div class="pizza__wrapper">
-        <div
-          v-for="(count, name) in ingredientsCounts"
-          :key="name"
-          class="pizza__filling"
-          :class="[
-            `pizza__filling--${name}`,
-            count === IngredientCount.Double && 'pizza__filling--second',
-            count === IngredientCount.Triple && 'pizza__filling--third',
-          ]"
-        />
+    <app-drop @drop="emit('drop', $event)">
+      <div class="pizza" :class="`pizza--foundation--${dough}-${sauce}`">
+        <div class="pizza__wrapper">
+          <div
+            v-for="(count, name) in ingredientsCounts"
+            :key="name"
+            class="pizza__filling"
+            :class="[
+              `pizza__filling--${name}`,
+              count === IngredientCount.Double && 'pizza__filling--second',
+              count === IngredientCount.Triple && 'pizza__filling--third',
+            ]"
+          />
+        </div>
       </div>
-    </div>
+    </app-drop>
   </div>
 </template>
 
 <script setup>
 import { IngredientCount } from "@/common/enums";
+import AppDrop from "@/common/components/AppDrop.vue";
 
 defineProps({
   dough: {
@@ -34,6 +37,8 @@ defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits(["drop"]);
 </script>
 
 <style lang="scss" scoped>
