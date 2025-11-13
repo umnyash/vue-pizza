@@ -42,7 +42,7 @@
           />
 
           <div class="content__result">
-            <p>Итого: 0 ₽</p>
+            <p>Итого: {{ price }} ₽</p>
             <button type="button" class="button" disabled>Готовьте!</button>
           </div>
         </div>
@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
 import doughJSON from "@/mocks/dough.json";
 import ingredientsJSON from "@/mocks/ingredients.json";
 import saucesJSON from "@/mocks/sauces.json";
@@ -82,6 +82,27 @@ const pizza = reactive({
   size: sizes[1].value,
   sauce: sauces[0].value,
   ingredientsCounts: {},
+});
+
+const price = computed(() => {
+  const doughPrice = doughs.find((dough) => dough.value === pizza.dough).price;
+  const saucePrice = sauces.find((sauce) => sauce.value === pizza.sauce).price;
+
+  const ingredientsPrice = ingredients.reduce((acc, ingredient) => {
+    const ingredientCount = pizza.ingredientsCounts[ingredient.value];
+
+    if (ingredientCount) {
+      acc += ingredient.price * ingredientCount;
+    }
+
+    return acc;
+  }, 0);
+
+  const sizeMultiplier = sizes.find(
+    (size) => size.value === pizza.size,
+  ).multiplier;
+
+  return (doughPrice + saucePrice + ingredientsPrice) * sizeMultiplier;
 });
 
 const updateIngredientsCounts = (ingredient, count) => {
