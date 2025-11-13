@@ -43,7 +43,9 @@
 
           <div class="content__result">
             <p>Итого: {{ price }} ₽</p>
-            <button type="button" class="button" disabled>Готовьте!</button>
+            <button type="button" class="button" :disabled="!pizza.name">
+              Готовьте!
+            </button>
           </div>
         </div>
       </div>
