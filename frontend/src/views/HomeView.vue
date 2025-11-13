@@ -38,6 +38,7 @@
             :dough="pizza.dough"
             :sauce="pizza.sauce"
             :ingredients-counts="pizza.ingredientsCounts"
+            @drop="handlePizzaVisualizationDrop"
           />
 
           <div class="content__result">
@@ -103,6 +104,12 @@ const updateIngredientsCounts = (ingredient, count) => {
   }
 
   pizza.ingredientsCounts = currentIngredientsCounts;
+};
+
+const handlePizzaVisualizationDrop = (ingredient) => {
+  pizza.ingredientsCounts[ingredient] = pizza.ingredientsCounts[ingredient]
+    ? pizza.ingredientsCounts[ingredient] + 1
+    : 1;
 };
 </script>
 
