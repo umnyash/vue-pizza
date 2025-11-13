@@ -1,14 +1,40 @@
 <template>
   <div class="content__constructor">
-    <div class="pizza pizza--foundation--big-tomato">
+    <div class="pizza" :class="`pizza--foundation--${dough}-${sauce}`">
       <div class="pizza__wrapper">
-        <div class="pizza__filling pizza__filling--ananas"></div>
-        <div class="pizza__filling pizza__filling--bacon"></div>
-        <div class="pizza__filling pizza__filling--cheddar"></div>
+        <div
+          v-for="(count, name) in ingredientsCounts"
+          :key="name"
+          class="pizza__filling"
+          :class="[
+            `pizza__filling--${name}`,
+            count === IngredientCount.Double && 'pizza__filling--second',
+            count === IngredientCount.Triple && 'pizza__filling--third',
+          ]"
+        />
       </div>
     </div>
   </div>
 </template>
+
+<script setup>
+import { IngredientCount } from "@/common/enums";
+
+defineProps({
+  dough: {
+    type: String,
+    required: true,
+  },
+  sauce: {
+    type: String,
+    required: true,
+  },
+  ingredientsCounts: {
+    type: Object,
+    required: true,
+  },
+});
+</script>
 
 <style lang="scss" scoped>
 .content__constructor {
@@ -179,19 +205,19 @@
   background-position: center;
   background-size: 100%;
 
-  &--foundation--big-creamy {
+  &--foundation--large-creamy {
     background-image: url("@/assets/img/foundation/big-creamy.svg");
   }
 
-  &--foundation--big-tomato {
+  &--foundation--large-tomato {
     background-image: url("@/assets/img/foundation/big-tomato.svg");
   }
 
-  &--foundation--small-creamy {
+  &--foundation--light-creamy {
     background-image: url("@/assets/img/foundation/small-creamy.svg");
   }
 
-  &--foundation--small-tomato {
+  &--foundation--light-tomato {
     background-image: url("@/assets/img/foundation/small-tomato.svg");
   }
 }
