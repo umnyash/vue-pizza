@@ -34,7 +34,11 @@
             />
           </label>
 
-          <pizza-visualization />
+          <pizza-visualization
+            :dough="pizza.dough"
+            :sauce="pizza.sauce"
+            :ingredients-counts="pizza.ingredientsCounts"
+          />
 
           <div class="content__result">
             <p>Итого: 0 ₽</p>
