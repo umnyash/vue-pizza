@@ -13,10 +13,10 @@
           <input
             type="radio"
             name="diameter"
-            :value="size.value"
+            :value="size.id"
             class="visually-hidden"
-            :checked="size.value === modelValue"
-            @input="emit('update:modelValue', size.value)"
+            :checked="size.id === modelValue"
+            @input="emit('update:modelValue', size.id)"
           />
           <span>{{ size.name }}</span>
         </label>
@@ -32,8 +32,8 @@ const dataStore = useDataStore();
 
 defineProps({
   modelValue: {
-    type: String,
-    default: "",
+    type: Number,
+    required: true,
   },
 });
 

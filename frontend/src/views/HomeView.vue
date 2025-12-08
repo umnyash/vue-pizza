@@ -3,8 +3,8 @@
     <form action="#" method="post">
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
-        <dough-selector v-model="pizza.dough" />
-        <size-selector v-model="pizza.size" />
+        <dough-selector v-model="pizza.doughId" />
+        <size-selector v-model="pizza.sizeId" />
 
         <div class="content__ingredients">
           <div class="sheet">
@@ -13,7 +13,7 @@
             </h2>
 
             <div class="sheet__content ingredients">
-              <sauce-selector v-model="pizza.sauce" />
+              <sauce-selector v-model="pizza.sauceId" />
               <ingredients-selector
                 :ingredients-counts="pizza.ingredientsCounts"
                 @change="updateIngredientsCounts"
@@ -34,8 +34,8 @@
           </label>
 
           <pizza-visualization
-            :dough="pizza.dough"
-            :sauce="pizza.sauce"
+            :dough-id="pizza.doughId"
+            :sauce-id="pizza.sauceId"
             :ingredients-counts="pizza.ingredientsCounts"
             @drop="handlePizzaVisualizationDrop"
           />
@@ -65,23 +65,23 @@ const dataStore = useDataStore();
 
 const pizza = reactive({
   name: "",
-  dough: dataStore.doughs[0].value,
-  size: dataStore.sizes[1].value,
-  sauce: dataStore.sauces[0].value,
+  doughId: dataStore.doughs[0].id,
+  sizeId: dataStore.sizes[1].id,
+  sauceId: dataStore.sauces[0].id,
   ingredientsCounts: {},
 });
 
 const price = computed(() => {
   const doughPrice = dataStore.doughs.find(
-    (dough) => dough.value === pizza.dough,
+    (dough) => dough.id === pizza.doughId,
   ).price;
 
   const saucePrice = dataStore.sauces.find(
-    (sauce) => sauce.value === pizza.sauce,
+    (sauce) => sauce.id === pizza.sauceId,
   ).price;
 
   const ingredientsPrice = dataStore.ingredients.reduce((acc, ingredient) => {
-    const ingredientCount = pizza.ingredientsCounts[ingredient.value];
+    const ingredientCount = pizza.ingredientsCounts[ingredient.id];
 
     if (ingredientCount) {
       acc += ingredient.price * ingredientCount;
@@ -91,13 +91,13 @@ const price = computed(() => {
   }, 0);
 
   const sizeMultiplier = dataStore.sizes.find(
-    (size) => size.value === pizza.size,
+    (size) => size.id === pizza.sizeId,
   ).multiplier;
 
   return (doughPrice + saucePrice + ingredientsPrice) * sizeMultiplier;
 });
 
-const updateIngredientsCounts = (ingredient, count) => {
+const updateIngredientsCounts = (id, count) => {
   /*
     A technique is used to overwrite the entire object to fix the problem
     where the user repeatedly enters a quantity greater than the maximum,
@@ -111,17 +111,17 @@ const updateIngredientsCounts = (ingredient, count) => {
   const currentIngredientsCounts = { ...pizza.ingredientsCounts };
 
   if (count) {
-    currentIngredientsCounts[ingredient] = count;
+    currentIngredientsCounts[id] = count;
   } else {
-    delete currentIngredientsCounts[ingredient];
+    delete currentIngredientsCounts[id];
   }
 
   pizza.ingredientsCounts = currentIngredientsCounts;
 };
 
-const handlePizzaVisualizationDrop = (ingredient) => {
-  pizza.ingredientsCounts[ingredient] = pizza.ingredientsCounts[ingredient]
-    ? pizza.ingredientsCounts[ingredient] + 1
+const handlePizzaVisualizationDrop = (id) => {
+  pizza.ingredientsCounts[id] = pizza.ingredientsCounts[id]
+    ? pizza.ingredientsCounts[id] + 1
     : 1;
 };
 </script>

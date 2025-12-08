@@ -18,7 +18,7 @@ const props = defineProps({
     default: false,
   },
   dataTransfer: {
-    type: String,
+    type: Number,
     required: true,
   },
 });
