@@ -3,7 +3,11 @@
     <div class="sheet">
       <h2 class="title title--small sheet__title">Выберите тесто</h2>
       <div class="sheet__content dough">
-        <label v-for="dough of doughs" :key="dough.id" class="dough__input">
+        <label
+          v-for="dough of dataStore.doughs"
+          :key="dough.id"
+          class="dough__input"
+        >
           <input
             type="radio"
             name="dough"
@@ -23,12 +27,11 @@
 
 <script setup>
 import { getImage } from "@/common/helpers/getImage";
+import { useDataStore } from "@/stores";
+
+const dataStore = useDataStore();
 
 defineProps({
-  doughs: {
-    type: Array,
-    required: true,
-  },
   modelValue: {
     type: String,
     default: "",
