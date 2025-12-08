@@ -1,14 +1,14 @@
 <template>
   <div class="content__constructor">
     <app-drop @drop="emit('drop', $event)">
-      <div class="pizza" :class="`pizza--foundation--${dough}-${sauce}`">
+      <div class="pizza" :class="pizzaClassModifier">
         <div class="pizza__wrapper">
           <div
-            v-for="(count, name) in ingredientsCounts"
-            :key="name"
+            v-for="(count, id) in ingredientsCounts"
+            :key="id"
             class="pizza__filling"
             :class="[
-              `pizza__filling--${name}`,
+              `pizza__filling--${Ingredient[id]}`,
               count === IngredientCount.Double && 'pizza__filling--second',
               count === IngredientCount.Triple && 'pizza__filling--third',
             ]"
@@ -20,16 +20,17 @@
 </template>
 
 <script setup>
-import { IngredientCount } from "@/common/enums";
+import { computed } from "vue";
+import { DoughType, Sauce, Ingredient, IngredientCount } from "@/common/enums";
 import AppDrop from "@/common/components/AppDrop.vue";
 
-defineProps({
-  dough: {
-    type: String,
+const props = defineProps({
+  doughId: {
+    type: Number,
     required: true,
   },
-  sauce: {
-    type: String,
+  sauceId: {
+    type: Number,
     required: true,
   },
   ingredientsCounts: {
@@ -39,6 +40,11 @@ defineProps({
 });
 
 const emit = defineEmits(["drop"]);
+
+const pizzaClassModifier = computed(
+  () =>
+    `pizza--foundation--${DoughType[props.doughId]}-${Sauce[props.sauceId]}`,
+);
 </script>
 
 <style lang="scss" scoped>

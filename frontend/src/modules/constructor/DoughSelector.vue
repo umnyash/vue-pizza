@@ -11,10 +11,10 @@
           <input
             type="radio"
             name="dough"
-            :value="dough.value"
+            :value="dough.id"
             class="visually-hidden"
-            :checked="dough.value === modelValue"
-            @input="emit('update:modelValue', dough.value)"
+            :checked="dough.id === modelValue"
+            @input="emit('update:modelValue', dough.id)"
           />
           <img :src="getImage(dough.image)" :alt="dough.name" />
           <b>{{ dough.name }}</b>
@@ -33,8 +33,8 @@ const dataStore = useDataStore();
 
 defineProps({
   modelValue: {
-    type: String,
-    default: "",
+    type: Number,
+    required: true,
   },
 });
 

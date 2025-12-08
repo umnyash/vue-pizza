@@ -9,10 +9,8 @@
         class="ingredients__item"
       >
         <app-drag
-          :data-transfer="ingredient.value"
-          :draggable="
-            getIngredientCount(ingredient.value) < IngredientCount.Max
-          "
+          :data-transfer="ingredient.id"
+          :draggable="getIngredientCount(ingredient.id) < IngredientCount.Max"
         >
           <div class="filling">
             <img :src="getImage(ingredient.image)" :alt="ingredient.name" />
@@ -22,9 +20,9 @@
 
         <app-counter
           class="ingredients__counter"
-          :value="getIngredientCount(ingredient.value)"
+          :value="getIngredientCount(ingredient.id)"
           :max="IngredientCount.Max"
-          @input="handleCountFieldInput(ingredient.value, $event)"
+          @input="handleCountFieldInput(ingredient.id, $event)"
         />
       </li>
     </ul>
@@ -49,18 +47,18 @@ const props = defineProps({
 
 const emit = defineEmits(["change"]);
 
-const emitChangeEvent = (ingredient, count) => {
-  emit("change", ingredient, count);
+const emitChangeEvent = (id, count) => {
+  emit("change", id, count);
 };
 
-const getIngredientCount = (ingredient) =>
-  props.ingredientsCounts[ingredient] ?? IngredientCount.Min;
+const getIngredientCount = (id) =>
+  props.ingredientsCounts[id] ?? IngredientCount.Min;
 
-const handleCountFieldInput = (ingredient, count) => {
+const handleCountFieldInput = (id, count) => {
   const normalizedCount = parseInt(count) || IngredientCount.Min;
 
   emitChangeEvent(
-    ingredient,
+    id,
     Math.max(
       Math.min(normalizedCount, IngredientCount.Max),
       IngredientCount.Min,

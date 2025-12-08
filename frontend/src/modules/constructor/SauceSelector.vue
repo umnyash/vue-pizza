@@ -10,9 +10,9 @@
       <input
         type="radio"
         name="sauce"
-        :value="sauce.value"
-        :checked="sauce.value === modelValue"
-        @input="emit('update:modelValue', sauce.value)"
+        :value="sauce.id"
+        :checked="sauce.id === modelValue"
+        @input="emit('update:modelValue', sauce.id)"
       />
       <span>{{ sauce.name }}</span>
     </label>
@@ -26,8 +26,8 @@ const dataStore = useDataStore();
 
 defineProps({
   modelValue: {
-    type: String,
-    default: "",
+    type: Number,
+    required: true,
   },
 });
 
