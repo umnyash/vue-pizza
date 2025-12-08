@@ -5,7 +5,7 @@
 
       <div class="sheet__content diameter">
         <label
-          v-for="size of sizes"
+          v-for="size of dataStore.sizes"
           :key="size.id"
           class="diameter__input"
           :class="`diameter__input--${size.value}`"
@@ -26,11 +26,11 @@
 </template>
 
 <script setup>
+import { useDataStore } from "@/stores";
+
+const dataStore = useDataStore();
+
 defineProps({
-  sizes: {
-    type: Array,
-    required: true,
-  },
   modelValue: {
     type: String,
     default: "",

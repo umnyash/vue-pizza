@@ -4,7 +4,7 @@
 
     <ul class="ingredients__list">
       <li
-        v-for="ingredient of ingredients"
+        v-for="ingredient of dataStore.ingredients"
         :key="ingredient.id"
         class="ingredients__item"
       >
@@ -34,14 +34,13 @@
 <script setup>
 import { IngredientCount } from "@/common/enums";
 import { getImage } from "@/common/helpers/getImage";
+import { useDataStore } from "@/stores";
 import AppDrag from "@/common/components/AppDrag.vue";
 import AppCounter from "@/common/components/AppCounter.vue";
 
+const dataStore = useDataStore();
+
 const props = defineProps({
-  ingredients: {
-    type: Array,
-    required: true,
-  },
   ingredientsCounts: {
     type: Object,
     default: () => ({}),

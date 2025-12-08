@@ -3,8 +3,8 @@
     <form action="#" method="post">
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
-        <dough-selector v-model="pizza.dough" :doughs="doughs" />
-        <size-selector v-model="pizza.size" :sizes="sizes" />
+        <dough-selector v-model="pizza.dough" />
+        <size-selector v-model="pizza.size" />
 
         <div class="content__ingredients">
           <div class="sheet">
@@ -13,9 +13,8 @@
             </h2>
 
             <div class="sheet__content ingredients">
-              <sauce-selector v-model="pizza.sauce" :sauces="sauces" />
+              <sauce-selector v-model="pizza.sauce" />
               <ingredients-selector
-                :ingredients="ingredients"
                 :ingredients-counts="pizza.ingredientsCounts"
                 @change="updateIngredientsCounts"
               />
@@ -55,42 +54,33 @@
 
 <script setup>
 import { reactive, computed } from "vue";
-import doughJSON from "@/mocks/dough.json";
-import ingredientsJSON from "@/mocks/ingredients.json";
-import saucesJSON from "@/mocks/sauces.json";
-import sizesJSON from "@/mocks/sizes.json";
-
-import {
-  normalizeDough,
-  normalizeSize,
-  normalizeIngredient,
-  normalizeSauce,
-} from "@/common/helpers/normalize";
-
+import { useDataStore } from "@/stores";
 import DoughSelector from "@/modules/constructor/DoughSelector.vue";
 import SizeSelector from "@/modules/constructor/SizeSelector.vue";
 import SauceSelector from "@/modules/constructor/SauceSelector.vue";
 import IngredientsSelector from "@/modules/constructor/IngredientsSelector.vue";
 import PizzaVisualization from "@/modules/constructor/PizzaVisualization.vue";
 
-const doughs = doughJSON.map(normalizeDough);
-const ingredients = ingredientsJSON.map(normalizeIngredient);
-const sauces = saucesJSON.map(normalizeSauce);
-const sizes = sizesJSON.map(normalizeSize);
+const dataStore = useDataStore();
 
 const pizza = reactive({
   name: "",
-  dough: doughs[0].value,
-  size: sizes[1].value,
-  sauce: sauces[0].value,
+  dough: dataStore.doughs[0].value,
+  size: dataStore.sizes[1].value,
+  sauce: dataStore.sauces[0].value,
   ingredientsCounts: {},
 });
 
 const price = computed(() => {
-  const doughPrice = doughs.find((dough) => dough.value === pizza.dough).price;
-  const saucePrice = sauces.find((sauce) => sauce.value === pizza.sauce).price;
+  const doughPrice = dataStore.doughs.find(
+    (dough) => dough.value === pizza.dough,
+  ).price;
 
-  const ingredientsPrice = ingredients.reduce((acc, ingredient) => {
+  const saucePrice = dataStore.sauces.find(
+    (sauce) => sauce.value === pizza.sauce,
+  ).price;
+
+  const ingredientsPrice = dataStore.ingredients.reduce((acc, ingredient) => {
     const ingredientCount = pizza.ingredientsCounts[ingredient.value];
 
     if (ingredientCount) {
@@ -100,7 +90,7 @@ const price = computed(() => {
     return acc;
   }, 0);
 
-  const sizeMultiplier = sizes.find(
+  const sizeMultiplier = dataStore.sizes.find(
     (size) => size.value === pizza.size,
   ).multiplier;
 

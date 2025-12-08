@@ -3,7 +3,7 @@
     <p>Основной соус:</p>
 
     <label
-      v-for="sauce of sauces"
+      v-for="sauce of dataStore.sauces"
       :key="sauce.id"
       class="radio ingredients__input"
     >
@@ -20,11 +20,11 @@
 </template>
 
 <script setup>
+import { useDataStore } from "@/stores";
+
+const dataStore = useDataStore();
+
 defineProps({
-  sauces: {
-    type: Array,
-    required: true,
-  },
   modelValue: {
     type: String,
     default: "",
