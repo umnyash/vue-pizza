@@ -1,10 +1,10 @@
 <template>
   <div class="content__constructor">
-    <app-drop @drop="emit('drop', $event)">
+    <app-drop @drop="pizzaStore.increaseIngredientCount">
       <div class="pizza" :class="pizzaClassModifier">
         <div class="pizza__wrapper">
           <div
-            v-for="(count, id) in ingredientsCounts"
+            v-for="(count, id) in pizzaStore.ingredientsCounts"
             :key="id"
             class="pizza__filling"
             :class="[
@@ -22,28 +22,14 @@
 <script setup>
 import { computed } from "vue";
 import { DoughType, Sauce, Ingredient, IngredientCount } from "@/common/enums";
+import { usePizzaStore } from "@/stores";
 import AppDrop from "@/common/components/AppDrop.vue";
 
-const props = defineProps({
-  doughId: {
-    type: Number,
-    required: true,
-  },
-  sauceId: {
-    type: Number,
-    required: true,
-  },
-  ingredientsCounts: {
-    type: Object,
-    required: true,
-  },
-});
-
-const emit = defineEmits(["drop"]);
+const pizzaStore = usePizzaStore();
 
 const pizzaClassModifier = computed(
   () =>
-    `pizza--foundation--${DoughType[props.doughId]}-${Sauce[props.sauceId]}`,
+    `pizza--foundation--${DoughType[pizzaStore.doughId]}-${Sauce[pizzaStore.sauceId]}`,
 );
 </script>
 

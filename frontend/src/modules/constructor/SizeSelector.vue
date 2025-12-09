@@ -11,12 +11,11 @@
           :class="`diameter__input--${size.value}`"
         >
           <input
+            v-model="pizzaStore.sizeId"
             type="radio"
             name="diameter"
             :value="size.id"
             class="visually-hidden"
-            :checked="size.id === modelValue"
-            @input="emit('update:modelValue', size.id)"
           />
           <span>{{ size.name }}</span>
         </label>
@@ -26,18 +25,10 @@
 </template>
 
 <script setup>
-import { useDataStore } from "@/stores";
+import { useDataStore, usePizzaStore } from "@/stores";
 
 const dataStore = useDataStore();
-
-defineProps({
-  modelValue: {
-    type: Number,
-    required: true,
-  },
-});
-
-const emit = defineEmits(["update:modelValue"]);
+const pizzaStore = usePizzaStore();
 </script>
 
 <style lang="scss" scoped>

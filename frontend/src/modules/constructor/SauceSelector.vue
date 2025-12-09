@@ -8,11 +8,10 @@
       class="radio ingredients__input"
     >
       <input
+        v-model="pizzaStore.sauceId"
         type="radio"
         name="sauce"
         :value="sauce.id"
-        :checked="sauce.id === modelValue"
-        @input="emit('update:modelValue', sauce.id)"
       />
       <span>{{ sauce.name }}</span>
     </label>
@@ -20,18 +19,10 @@
 </template>
 
 <script setup>
-import { useDataStore } from "@/stores";
+import { useDataStore, usePizzaStore } from "@/stores";
 
 const dataStore = useDataStore();
-
-defineProps({
-  modelValue: {
-    type: Number,
-    required: true,
-  },
-});
-
-const emit = defineEmits(["update:modelValue"]);
+const pizzaStore = usePizzaStore();
 </script>
 
 <style lang="scss" scoped>
