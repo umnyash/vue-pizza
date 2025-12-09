@@ -54,6 +54,7 @@
 
 <script setup>
 import { reactive, computed } from "vue";
+import { calcPizzaPrice } from "@/common/helpers/calcPizzaPrice";
 import { useDataStore } from "@/stores";
 import DoughSelector from "@/modules/constructor/DoughSelector.vue";
 import SizeSelector from "@/modules/constructor/SizeSelector.vue";
@@ -71,31 +72,7 @@ const pizza = reactive({
   ingredientsCounts: {},
 });
 
-const price = computed(() => {
-  const doughPrice = dataStore.doughs.find(
-    (dough) => dough.id === pizza.doughId,
-  ).price;
-
-  const saucePrice = dataStore.sauces.find(
-    (sauce) => sauce.id === pizza.sauceId,
-  ).price;
-
-  const ingredientsPrice = dataStore.ingredients.reduce((acc, ingredient) => {
-    const ingredientCount = pizza.ingredientsCounts[ingredient.id];
-
-    if (ingredientCount) {
-      acc += ingredient.price * ingredientCount;
-    }
-
-    return acc;
-  }, 0);
-
-  const sizeMultiplier = dataStore.sizes.find(
-    (size) => size.id === pizza.sizeId,
-  ).multiplier;
-
-  return (doughPrice + saucePrice + ingredientsPrice) * sizeMultiplier;
-});
+const price = computed(() => calcPizzaPrice(pizza));
 
 const updateIngredientsCounts = (id, count) => {
   /*
