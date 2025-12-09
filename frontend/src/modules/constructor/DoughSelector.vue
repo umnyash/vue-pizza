@@ -9,12 +9,11 @@
           class="dough__input"
         >
           <input
+            v-model="pizzaStore.doughId"
             type="radio"
             name="dough"
             :value="dough.id"
             class="visually-hidden"
-            :checked="dough.id === modelValue"
-            @input="emit('update:modelValue', dough.id)"
           />
           <img :src="getImage(dough.image)" :alt="dough.name" />
           <b>{{ dough.name }}</b>
@@ -27,18 +26,10 @@
 
 <script setup>
 import { getImage } from "@/common/helpers/getImage";
-import { useDataStore } from "@/stores";
+import { useDataStore, usePizzaStore } from "@/stores";
 
 const dataStore = useDataStore();
-
-defineProps({
-  modelValue: {
-    type: Number,
-    required: true,
-  },
-});
-
-const emit = defineEmits(["update:modelValue"]);
+const pizzaStore = usePizzaStore();
 </script>
 
 <style lang="scss" scoped>

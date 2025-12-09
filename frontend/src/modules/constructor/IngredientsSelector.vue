@@ -10,7 +10,9 @@
       >
         <app-drag
           :data-transfer="ingredient.id"
-          :draggable="getIngredientCount(ingredient.id) < IngredientCount.Max"
+          :draggable="
+            pizzaStore.getIngredientCount(ingredient.id) < IngredientCount.Max
+          "
         >
           <div class="filling">
             <img :src="getImage(ingredient.image)" :alt="ingredient.name" />
@@ -20,7 +22,7 @@
 
         <app-counter
           class="ingredients__counter"
-          :value="getIngredientCount(ingredient.id)"
+          :value="pizzaStore.getIngredientCount(ingredient.id)"
           :max="IngredientCount.Max"
           @input="handleCountFieldInput(ingredient.id, $event)"
         />
@@ -32,32 +34,17 @@
 <script setup>
 import { IngredientCount } from "@/common/enums";
 import { getImage } from "@/common/helpers/getImage";
-import { useDataStore } from "@/stores";
+import { useDataStore, usePizzaStore } from "@/stores";
 import AppDrag from "@/common/components/AppDrag.vue";
 import AppCounter from "@/common/components/AppCounter.vue";
 
 const dataStore = useDataStore();
-
-const props = defineProps({
-  ingredientsCounts: {
-    type: Object,
-    default: () => ({}),
-  },
-});
-
-const emit = defineEmits(["change"]);
-
-const emitChangeEvent = (id, count) => {
-  emit("change", id, count);
-};
-
-const getIngredientCount = (id) =>
-  props.ingredientsCounts[id] ?? IngredientCount.Min;
+const pizzaStore = usePizzaStore();
 
 const handleCountFieldInput = (id, count) => {
   const normalizedCount = parseInt(count) || IngredientCount.Min;
 
-  emitChangeEvent(
+  pizzaStore.setIngredientCount(
     id,
     Math.max(
       Math.min(normalizedCount, IngredientCount.Max),
