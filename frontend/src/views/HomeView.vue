@@ -34,7 +34,12 @@
 
           <div class="content__result">
             <p>Итого: {{ pizzaStore.price }} ₽</p>
-            <button type="button" class="button" :disabled="!pizzaStore.name">
+            <button
+              type="button"
+              class="button"
+              :disabled="!pizzaStore.name"
+              @click="handleCartButtonClick"
+            >
               Готовьте!
             </button>
           </div>
@@ -45,14 +50,28 @@
 </template>
 
 <script setup>
-import { usePizzaStore } from "@/stores";
+import { onUnmounted } from "vue";
+import { useRouter } from "vue-router";
+import { usePizzaStore, useCartStore } from "@/stores";
 import DoughSelector from "@/modules/constructor/DoughSelector.vue";
 import SizeSelector from "@/modules/constructor/SizeSelector.vue";
 import SauceSelector from "@/modules/constructor/SauceSelector.vue";
 import IngredientsSelector from "@/modules/constructor/IngredientsSelector.vue";
 import PizzaVisualization from "@/modules/constructor/PizzaVisualization.vue";
 
+const router = useRouter();
+
 const pizzaStore = usePizzaStore();
+const cartStore = useCartStore();
+
+const handleCartButtonClick = () => {
+  cartStore.addPizza({ ...pizzaStore.$state, price: pizzaStore.price });
+  router.push({ name: "cart" });
+};
+
+onUnmounted(() => {
+  pizzaStore.reset();
+});
 </script>
 
 <style lang="scss">
