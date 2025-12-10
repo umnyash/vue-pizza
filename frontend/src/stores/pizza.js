@@ -22,6 +22,13 @@ export const usePizzaStore = defineStore("pizza", {
     },
   },
   actions: {
+    reset() {
+      this.name = "";
+      this.doughId = doughJSON[0].id;
+      this.sizeId = sizesJSON[0].id;
+      this.sauceId = saucesJSON[0].id;
+      this.ingredientsCounts = {};
+    },
     setIngredientCount(id, count) {
       if (count) {
         this.ingredientsCounts[id] = count;

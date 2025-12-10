@@ -6,66 +6,68 @@
           <h1 class="title title--big">Корзина</h1>
         </div>
 
-        <!-- <div class="sheet cart__empty">
-          <p>В корзине нет ни одного товара</p>
-        </div> -->
+        <template v-if="cartStore.pizzas.length">
+          <cart-pizzas-list />
 
-        <cart-pizzas-list />
+          <div class="cart__additional">
+            <cart-addons-list />
+          </div>
 
-        <div class="cart__additional">
-          <cart-addons-list />
-        </div>
+          <div class="cart__form">
+            <div class="cart-form">
+              <label class="cart-form__select">
+                <span class="cart-form__label">Получение заказа:</span>
 
-        <div class="cart__form">
-          <div class="cart-form">
-            <label class="cart-form__select">
-              <span class="cart-form__label">Получение заказа:</span>
+                <select name="test" class="select">
+                  <option value="1">Заберу сам</option>
+                  <option value="2">Новый адрес</option>
+                  <option value="3">Дом</option>
+                </select>
+              </label>
 
-              <select name="test" class="select">
-                <option value="1">Заберу сам</option>
-                <option value="2">Новый адрес</option>
-                <option value="3">Дом</option>
-              </select>
-            </label>
+              <label class="input input--big-label">
+                <span>Контактный телефон:</span>
+                <input type="text" name="tel" placeholder="+7 999-999-99-99" />
+              </label>
 
-            <label class="input input--big-label">
-              <span>Контактный телефон:</span>
-              <input type="text" name="tel" placeholder="+7 999-999-99-99" />
-            </label>
+              <div class="cart-form__address">
+                <span class="cart-form__label">Новый адрес:</span>
 
-            <div class="cart-form__address">
-              <span class="cart-form__label">Новый адрес:</span>
+                <div class="cart-form__input">
+                  <label class="input">
+                    <span>Улица*</span>
+                    <input type="text" name="street" />
+                  </label>
+                </div>
 
-              <div class="cart-form__input">
-                <label class="input">
-                  <span>Улица*</span>
-                  <input type="text" name="street" />
-                </label>
-              </div>
+                <div class="cart-form__input cart-form__input--small">
+                  <label class="input">
+                    <span>Дом*</span>
+                    <input type="text" name="house" />
+                  </label>
+                </div>
 
-              <div class="cart-form__input cart-form__input--small">
-                <label class="input">
-                  <span>Дом*</span>
-                  <input type="text" name="house" />
-                </label>
-              </div>
-
-              <div class="cart-form__input cart-form__input--small">
-                <label class="input">
-                  <span>Квартира</span>
-                  <input type="text" name="apartment" />
-                </label>
+                <div class="cart-form__input cart-form__input--small">
+                  <label class="input">
+                    <span>Квартира</span>
+                    <input type="text" name="apartment" />
+                  </label>
+                </div>
               </div>
             </div>
           </div>
+        </template>
+
+        <div v-else class="sheet cart__empty">
+          <p>В корзине нет ни одного товара</p>
         </div>
       </div>
     </main>
-    <section class="footer">
+    <section v-if="cartStore.pizzas.length" class="footer">
       <div class="footer__more">
-        <a href="#" class="button button--border button--arrow"
-          >Хочу еще одну</a
-        >
+        <router-link to="/" class="button button--border button--arrow">
+          Хочу еще одну
+        </router-link>
       </div>
       <p class="footer__text">
         Перейти к конструктору<br />чтоб собрать ещё одну пиццу
@@ -82,8 +84,11 @@
 </template>
 
 <script setup>
+import { useCartStore } from "@/stores";
 import CartPizzasList from "@/modules/cart/CartPizzasList.vue";
 import CartAddonsList from "@/modules/cart/CartAddonsList.vue";
+
+const cartStore = useCartStore();
 </script>
 
 <style lang="scss">
