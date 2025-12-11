@@ -17,6 +17,7 @@ export const useCartStore = defineStore("cart", {
         ingredients: Object.keys(pizza.ingredientsCounts).map((ingredientId) =>
           dataStore.getIngredientById(+ingredientId),
         ),
+        totalPrice: pizza.price * pizza.quantity,
       }));
     },
     getPizzaById(state) {
@@ -26,9 +27,19 @@ export const useCartStore = defineStore("cart", {
   actions: {
     addPizza(pizza) {
       pizza.id = crypto.randomUUID();
+      pizza.quantity = 1;
       this.pizzas.push(pizza);
     },
+    removePizzaById(id) {
+      const pizzaIndex = this.pizzas.findIndex((pizza) => pizza.id === id);
+      this.pizzas.splice(pizzaIndex, 1);
+    },
     updatePizza(pizza) {
+      if (pizza.quantity === 0) {
+        this.removePizzaById(pizza.id);
+        return;
+      }
+
       const pizzaIndex = this.pizzas.findIndex(({ id }) => id === pizza.id);
       const updatedPizza = { ...this.pizzas[pizzaIndex], ...pizza };
       this.pizzas.splice(pizzaIndex, 1, updatedPizza);
