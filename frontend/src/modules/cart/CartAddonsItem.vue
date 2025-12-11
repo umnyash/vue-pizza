@@ -2,18 +2,18 @@
   <li class="additional-list__item sheet">
     <p class="additional-list__description">
       <img
-        :src="getImage('cola.svg')"
+        :src="getImage(`${addon.image}.svg`)"
         width="39"
         height="60"
-        alt="Coca-Cola 0,5 литра"
+        :alt="addon.name"
       />
-      <span>Coca-Cola 0,5 литра</span>
+      <span>{{ addon.name }}</span>
     </p>
 
     <div class="additional-list__wrapper">
       <app-counter class="additional-list__counter" accent />
       <div class="additional-list__price">
-        <b>× 56 ₽</b>
+        <b>× {{ addon.price }} ₽</b>
       </div>
     </div>
   </li>
@@ -22,6 +22,13 @@
 <script setup>
 import { getImage } from "@/common/helpers/getImage";
 import AppCounter from "@/common/components/AppCounter.vue";
+
+defineProps({
+  addon: {
+    type: Object,
+    required: true,
+  },
+});
 </script>
 
 <style lang="scss">
