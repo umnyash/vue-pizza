@@ -19,6 +19,20 @@ export const useDataStore = defineStore("data", {
     sizes: sizesJSON.map(normalizeSize),
     misc: miscJSON,
   }),
-  getters: {},
+  getters: {
+    getDoughById(state) {
+      return (id) => state.doughs.find((dough) => dough.id === id);
+    },
+    getSauceById(state) {
+      return (id) => state.sauces.find((sauce) => sauce.id === id);
+    },
+    getSizeById(state) {
+      return (id) => state.sizes.find((size) => size.id === id);
+    },
+    getIngredientById(state) {
+      return (id) =>
+        state.ingredients.find((ingredient) => ingredient.id === id);
+    },
+  },
   actions: {},
 });

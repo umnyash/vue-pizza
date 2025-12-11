@@ -6,14 +6,14 @@
         class="product__img"
         width="56"
         height="56"
-        alt="Капричоза"
+        :alt="pizza.name"
       />
       <div class="product__text">
-        <h2>Капричоза</h2>
+        <h2>{{ pizza.name }}</h2>
         <ul>
-          <li>30 см, на тонком тесте</li>
-          <li>Соус: томатный</li>
-          <li>Начинка: грибы, лук, ветчина, пармезан, ананас</li>
+          <li>{{ pizza.size.name }}, {{ doughDescription }}</li>
+          <li>Соус: {{ sauce }}</li>
+          <li>Начинка: {{ filling }}</li>
         </ul>
       </div>
     </div>
@@ -21,7 +21,7 @@
     <app-counter class="cart-list__counter" accent />
 
     <div class="cart-list__price">
-      <b>782 ₽</b>
+      <b>{{ pizza.price }} ₽</b>
     </div>
 
     <div class="cart-list__button">
@@ -33,6 +33,23 @@
 <script setup>
 import { getImage } from "@/common/helpers/getImage";
 import AppCounter from "@/common/components/AppCounter.vue";
+
+const props = defineProps({
+  pizza: {
+    type: Object,
+    required: true,
+  },
+});
+
+const doughName = props.pizza.dough.name.toLowerCase();
+const doughDescription = `на ${doughName.slice(0, doughName.length - 1)}м тесте`;
+
+const sauce = props.pizza.sauce.name.toLowerCase();
+
+const filling = props.pizza.ingredients
+  .map(({ name }) => name)
+  .join(", ")
+  .toLowerCase();
 </script>
 
 <style lang="scss">
