@@ -4,6 +4,7 @@ import { useDataStore } from "@/stores";
 export const useCartStore = defineStore("cart", {
   state: () => ({
     pizzas: [],
+    addonsCounts: {},
   }),
   getters: {
     expandedPizzas(state) {
@@ -22,6 +23,9 @@ export const useCartStore = defineStore("cart", {
     },
     getPizzaById(state) {
       return (id) => state.pizzas.find((pizza) => pizza.id === id);
+    },
+    getAddonCount(state) {
+      return (id) => state.addonsCounts[id] ?? 0;
     },
   },
   actions: {
@@ -43,6 +47,13 @@ export const useCartStore = defineStore("cart", {
       const pizzaIndex = this.pizzas.findIndex(({ id }) => id === pizza.id);
       const updatedPizza = { ...this.pizzas[pizzaIndex], ...pizza };
       this.pizzas.splice(pizzaIndex, 1, updatedPizza);
+    },
+    setAddonCount(id, count) {
+      if (count) {
+        this.addonsCounts[id] = count;
+      } else {
+        delete this.addonsCounts[id];
+      }
     },
   },
 });

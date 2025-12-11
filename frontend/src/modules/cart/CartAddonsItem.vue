@@ -11,7 +11,12 @@
     </p>
 
     <div class="additional-list__wrapper">
-      <app-counter class="additional-list__counter" accent />
+      <app-counter
+        :value="cartStore.getAddonCount(addon.id)"
+        class="additional-list__counter"
+        accent
+        @input="cartStore.setAddonCount(addon.id, $event)"
+      />
       <div class="additional-list__price">
         <b>× {{ addon.price }} ₽</b>
       </div>
@@ -21,6 +26,7 @@
 
 <script setup>
 import { getImage } from "@/common/helpers/getImage";
+import { useCartStore } from "@/stores";
 import AppCounter from "@/common/components/AppCounter.vue";
 
 defineProps({
@@ -29,6 +35,8 @@ defineProps({
     required: true,
   },
 });
+
+const cartStore = useCartStore();
 </script>
 
 <style lang="scss">
