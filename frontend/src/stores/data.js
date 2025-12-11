@@ -29,6 +29,9 @@ export const useDataStore = defineStore("data", {
     getSizeById(state) {
       return (id) => state.sizes.find((size) => size.id === id);
     },
+    getAddonById(state) {
+      return (id) => state.misc.find((addon) => addon.id === id);
+    },
     getIngredientById(state) {
       return (id) =>
         state.ingredients.find((ingredient) => ingredient.id === id);

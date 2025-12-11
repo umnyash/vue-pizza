@@ -27,6 +27,28 @@ export const useCartStore = defineStore("cart", {
     getAddonCount(state) {
       return (id) => state.addonsCounts[id] ?? 0;
     },
+    totalPriceLocaleString(state) {
+      if (!state.pizzas.length) {
+        return String(0);
+      }
+
+      const dataStore = useDataStore();
+
+      const pizzasTotalPrice = this.expandedPizzas.reduce((sum, pizza) => {
+        return sum + pizza.totalPrice;
+      }, 0);
+
+      const addonsTotalPrice = Object.entries(state.addonsCounts).reduce(
+        (sum, [id, count]) => {
+          const addon = dataStore.getAddonById(Number(id));
+          return sum + addon.price * count;
+        },
+        0,
+      );
+
+      const totalPrice = pizzasTotalPrice + addonsTotalPrice;
+      return totalPrice.toLocaleString("ru");
+    },
   },
   actions: {
     addPizza(pizza) {
