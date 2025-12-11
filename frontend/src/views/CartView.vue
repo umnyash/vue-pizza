@@ -73,7 +73,7 @@
         Перейти к конструктору<br />чтоб собрать ещё одну пиццу
       </p>
       <div class="footer__price">
-        <b>Итого: 2 228 ₽</b>
+        <b>Итого: {{ cartStore.totalPriceLocaleString }} ₽</b>
       </div>
 
       <div class="footer__submit">
