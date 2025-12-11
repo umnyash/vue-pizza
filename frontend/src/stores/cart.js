@@ -19,10 +19,19 @@ export const useCartStore = defineStore("cart", {
         ),
       }));
     },
+    getPizzaById(state) {
+      return (id) => state.pizzas.find((pizza) => pizza.id === id);
+    },
   },
   actions: {
     addPizza(pizza) {
+      pizza.id = crypto.randomUUID();
       this.pizzas.push(pizza);
+    },
+    updatePizza(pizza) {
+      const pizzaIndex = this.pizzas.findIndex(({ id }) => id === pizza.id);
+      const updatedPizza = { ...this.pizzas[pizzaIndex], ...pizza };
+      this.pizzas.splice(pizzaIndex, 1, updatedPizza);
     },
   },
 });

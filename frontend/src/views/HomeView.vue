@@ -65,7 +65,12 @@ const pizzaStore = usePizzaStore();
 const cartStore = useCartStore();
 
 const handleCartButtonClick = () => {
-  cartStore.addPizza({ ...pizzaStore.$state, price: pizzaStore.price });
+  if (pizzaStore.id) {
+    cartStore.updatePizza({ ...pizzaStore.$state, price: pizzaStore.price });
+  } else {
+    cartStore.addPizza({ ...pizzaStore.$state, price: pizzaStore.price });
+  }
+
   router.push({ name: "cart" });
 };
 

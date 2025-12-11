@@ -7,6 +7,7 @@ import { calcPizzaPrice } from "@/common/helpers/calcPizzaPrice";
 
 export const usePizzaStore = defineStore("pizza", {
   state: () => ({
+    id: null,
     name: "",
     doughId: doughJSON[0].id,
     sizeId: sizesJSON[0].id,
@@ -23,11 +24,20 @@ export const usePizzaStore = defineStore("pizza", {
   },
   actions: {
     reset() {
+      this.id = null;
       this.name = "";
       this.doughId = doughJSON[0].id;
       this.sizeId = sizesJSON[0].id;
       this.sauceId = saucesJSON[0].id;
       this.ingredientsCounts = {};
+    },
+    set(pizza) {
+      this.id = pizza.id;
+      this.name = pizza.name;
+      this.doughId = pizza.doughId;
+      this.sizeId = pizza.sizeId;
+      this.sauceId = pizza.sauceId;
+      this.ingredientsCounts = pizza.ingredientsCounts;
     },
     setIngredientCount(id, count) {
       if (count) {

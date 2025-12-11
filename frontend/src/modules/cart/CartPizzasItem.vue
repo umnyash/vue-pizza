@@ -25,13 +25,21 @@
     </div>
 
     <div class="cart-list__button">
-      <button type="button" class="cart-list__edit">Изменить</button>
+      <button
+        type="button"
+        class="cart-list__edit"
+        @click="handleEditButtonClick"
+      >
+        Изменить
+      </button>
     </div>
   </li>
 </template>
 
 <script setup>
+import { useRouter } from "vue-router";
 import { getImage } from "@/common/helpers/getImage";
+import { usePizzaStore, useCartStore } from "@/stores";
 import AppCounter from "@/common/components/AppCounter.vue";
 
 const props = defineProps({
@@ -40,6 +48,10 @@ const props = defineProps({
     required: true,
   },
 });
+
+const router = useRouter();
+const pizzaStore = usePizzaStore();
+const cartStore = useCartStore();
 
 const doughName = props.pizza.dough.name.toLowerCase();
 const doughDescription = `на ${doughName.slice(0, doughName.length - 1)}м тесте`;
@@ -50,6 +62,11 @@ const filling = props.pizza.ingredients
   .map(({ name }) => name)
   .join(", ")
   .toLowerCase();
+
+const handleEditButtonClick = () => {
+  pizzaStore.set(cartStore.getPizzaById(props.pizza.id));
+  router.push({ name: "home" });
+};
 </script>
 
 <style lang="scss">
