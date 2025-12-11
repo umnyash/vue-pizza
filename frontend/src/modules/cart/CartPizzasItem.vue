@@ -18,10 +18,15 @@
       </div>
     </div>
 
-    <app-counter class="cart-list__counter" accent />
+    <app-counter
+      :value="pizza.quantity"
+      class="cart-list__counter"
+      accent
+      @input="setPizzaQuantity"
+    />
 
     <div class="cart-list__price">
-      <b>{{ pizza.price }} ₽</b>
+      <b>{{ pizza.totalPrice }} ₽</b>
     </div>
 
     <div class="cart-list__button">
@@ -66,6 +71,10 @@ const filling = props.pizza.ingredients
 const handleEditButtonClick = () => {
   pizzaStore.set(cartStore.getPizzaById(props.pizza.id));
   router.push({ name: "home" });
+};
+
+const setPizzaQuantity = (value) => {
+  cartStore.updatePizza({ id: props.pizza.id, quantity: +value });
 };
 </script>
 
