@@ -1,19 +1,21 @@
 import { defineStore } from "pinia";
-import doughJSON from "@/mocks/dough.json";
-import saucesJSON from "@/mocks/sauces.json";
-import sizesJSON from "@/mocks/sizes.json";
 import { IngredientCount } from "@/common/enums";
 import { calcPizzaPrice } from "@/common/helpers/calcPizzaPrice";
+import { useDataStore } from "./data";
 
 export const usePizzaStore = defineStore("pizza", {
-  state: () => ({
-    id: null,
-    name: "",
-    doughId: doughJSON[0].id,
-    sizeId: sizesJSON[0].id,
-    sauceId: saucesJSON[0].id,
-    ingredientsCounts: {},
-  }),
+  state: () => {
+    const dataStore = useDataStore();
+
+    return {
+      id: null,
+      name: "",
+      doughId: dataStore.doughs[0].id,
+      sizeId: dataStore.sizes[0].id,
+      sauceId: dataStore.sauces[0].id,
+      ingredientsCounts: {},
+    };
+  },
   getters: {
     getIngredientCount(state) {
       return (id) => state.ingredientsCounts[id] ?? IngredientCount.Min;
@@ -24,11 +26,13 @@ export const usePizzaStore = defineStore("pizza", {
   },
   actions: {
     reset() {
+      const dataStore = useDataStore();
+
       this.id = null;
       this.name = "";
-      this.doughId = doughJSON[0].id;
-      this.sizeId = sizesJSON[0].id;
-      this.sauceId = saucesJSON[0].id;
+      this.doughId = dataStore.doughs[0].id;
+      this.sizeId = dataStore.sizes[0].id;
+      this.sauceId = dataStore.sauces[0].id;
       this.ingredientsCounts = {};
     },
     set(pizza) {

@@ -60,7 +60,6 @@ import IngredientsSelector from "@/modules/constructor/IngredientsSelector.vue";
 import PizzaVisualization from "@/modules/constructor/PizzaVisualization.vue";
 
 const router = useRouter();
-
 const pizzaStore = usePizzaStore();
 const cartStore = useCartStore();
 

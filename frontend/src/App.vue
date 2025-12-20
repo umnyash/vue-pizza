@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <router-view v-if="isAuthChecked" />
+    <router-view v-if="isAuthChecked && dataStore.isDataLoaded" />
   </app-layout>
 </template>
 
@@ -8,13 +8,14 @@
 import { AppLayout } from "@/layouts";
 
 import { onMounted, ref } from "vue";
-import { useAuthStore } from "@/stores";
+import { useAuthStore, useDataStore } from "@/stores";
 import JwtService from "@/services/jwt/jwt.service";
 import router from "@/router";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
 const isAuthChecked = ref(false);
+const dataStore = useDataStore();
 
 const checkLoggedIn = async () => {
   const authStore = useAuthStore();
@@ -38,6 +39,7 @@ const checkLoggedIn = async () => {
 
 onMounted(() => {
   checkLoggedIn();
+  dataStore.loadData();
 });
 </script>
 

@@ -1,25 +1,30 @@
 import { defineStore } from "pinia";
-import doughJSON from "@/mocks/dough.json";
-import ingredientsJSON from "@/mocks/ingredients.json";
-import saucesJSON from "@/mocks/sauces.json";
-import sizesJSON from "@/mocks/sizes.json";
-import miscJSON from "@/mocks/misc.json";
 import {
   normalizeDough,
   normalizeSize,
   normalizeIngredient,
   normalizeSauce,
 } from "@/common/helpers/normalize";
+import resources from "@/services/resources";
 
 export const useDataStore = defineStore("data", {
   state: () => ({
-    doughs: doughJSON.map(normalizeDough),
-    ingredients: ingredientsJSON.map(normalizeIngredient),
-    sauces: saucesJSON.map(normalizeSauce),
-    sizes: sizesJSON.map(normalizeSize),
-    misc: miscJSON,
+    doughs: [],
+    ingredients: [],
+    sauces: [],
+    sizes: [],
+    misc: [],
   }),
   getters: {
+    isDataLoaded(state) {
+      return (
+        state.doughs.length &&
+        state.ingredients.length &&
+        state.sauces.length &&
+        state.sauces.length &&
+        state.misc.length
+      );
+    },
     getDoughById(state) {
       return (id) => state.doughs.find((dough) => dough.id === id);
     },
@@ -37,5 +42,55 @@ export const useDataStore = defineStore("data", {
         state.ingredients.find((ingredient) => ingredient.id === id);
     },
   },
-  actions: {},
+  actions: {
+    async loadData() {
+      await Promise.all([
+        this.loadDoughs(),
+        this.loadIngredients(),
+        this.loadSauces(),
+        this.loadSizes(),
+        this.loadMisc(),
+      ]);
+    },
+
+    async loadDoughs() {
+      const response = await resources.dough.getDoughs();
+
+      if (response.__state === "success") {
+        this.doughs = response.data.map(normalizeDough);
+      }
+    },
+
+    async loadIngredients() {
+      const response = await resources.ingredient.getIngredients();
+
+      if (response.__state === "success") {
+        this.ingredients = response.data.map(normalizeIngredient);
+      }
+    },
+
+    async loadSauces() {
+      const response = await resources.sauce.getSauces();
+
+      if (response.__state === "success") {
+        this.sauces = response.data.map(normalizeSauce);
+      }
+    },
+
+    async loadSizes() {
+      const response = await resources.size.getSizes();
+
+      if (response.__state === "success") {
+        this.sizes = response.data.map(normalizeSize);
+      }
+    },
+
+    async loadMisc() {
+      const response = await resources.misc.getMisc();
+
+      if (response.__state === "success") {
+        this.misc = response.data;
+      }
+    },
+  },
 });

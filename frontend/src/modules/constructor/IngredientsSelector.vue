@@ -15,7 +15,10 @@
           "
         >
           <div class="filling">
-            <img :src="getImage(ingredient.image)" :alt="ingredient.name" />
+            <img
+              :src="getPublicImage(ingredient.image)"
+              :alt="ingredient.name"
+            />
             {{ ingredient.name }}
           </div>
         </app-drag>
@@ -33,7 +36,7 @@
 
 <script setup>
 import { IngredientCount } from "@/common/enums";
-import { getImage } from "@/common/helpers/getImage";
+import { getPublicImage } from "@/common/helpers/getPublicImage";
 import { useDataStore, usePizzaStore } from "@/stores";
 import AppDrag from "@/common/components/AppDrag.vue";
 import AppCounter from "@/common/components/AppCounter.vue";

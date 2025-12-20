@@ -2,7 +2,7 @@
   <li class="additional-list__item sheet">
     <p class="additional-list__description">
       <img
-        :src="getImage(`${addon.image}.svg`)"
+        :src="getPublicImage(addon.image)"
         width="39"
         height="60"
         :alt="addon.name"
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { getImage } from "@/common/helpers/getImage";
+import { getPublicImage } from "@/common/helpers/getPublicImage";
 import { useCartStore } from "@/stores";
 import AppCounter from "@/common/components/AppCounter.vue";
 

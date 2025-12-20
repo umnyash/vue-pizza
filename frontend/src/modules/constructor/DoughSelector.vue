@@ -15,7 +15,7 @@
             :value="dough.id"
             class="visually-hidden"
           />
-          <img :src="getImage(dough.image)" :alt="dough.name" />
+          <img :src="getPublicImage(dough.image)" :alt="dough.name" />
           <b>{{ dough.name }}</b>
           <span>{{ dough.description }}</span>
         </label>
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { getImage } from "@/common/helpers/getImage";
+import { getPublicImage } from "@/common/helpers/getPublicImage";
 import { useDataStore, usePizzaStore } from "@/stores";
 
 const dataStore = useDataStore();
