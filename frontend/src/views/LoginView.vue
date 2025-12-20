@@ -6,24 +6,77 @@
     <div class="sign-form__title">
       <h1 class="title title--small">Авторизуйтесь на сайте</h1>
     </div>
-    <form action="#" method="post">
+    <form @submit.prevent="login">
       <div class="sign-form__input">
         <label class="input">
           <span>E-mail</span>
-          <input type="email" name="email" placeholder="example@mail.ru" />
+          <input
+            v-model="authData.email"
+            type="email"
+            name="email"
+            placeholder="example@mail.ru"
+            required
+            @input="handleFieldInput"
+          />
         </label>
       </div>
 
       <div class="sign-form__input">
         <label class="input">
           <span>Пароль</span>
-          <input type="password" name="pass" placeholder="***********" />
+          <input
+            v-model="authData.password"
+            type="password"
+            name="pass"
+            placeholder="***********"
+            required
+            @input="handleFieldInput"
+          />
         </label>
       </div>
       <button type="submit" class="button">Авторизоваться</button>
+
+      <div v-if="serverErrorMessage" class="sign-form__error-message">
+        {{ serverErrorMessage }}
+      </div>
     </form>
   </div>
 </template>
+
+<script setup>
+import { ref, reactive } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores";
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const authData = reactive({
+  email: "",
+  password: "",
+});
+
+const serverErrorMessage = ref(null);
+
+const handleFieldInput = () => {
+  if (serverErrorMessage.value) {
+    serverErrorMessage.value = null;
+  }
+};
+
+const login = async () => {
+  serverErrorMessage.value = "";
+
+  const responseMessage = await authStore.login(authData);
+
+  if (responseMessage === "success") {
+    await authStore.whoAmI();
+    router.push({ name: "home" });
+  } else {
+    serverErrorMessage.value = responseMessage;
+  }
+};
+</script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/ds-system/ds.scss";
@@ -122,5 +175,10 @@
       background-color: $white;
     }
   }
+}
+
+.sign-form__error-message {
+  margin-top: 20px;
+  color: $red-800;
 }
 </style>

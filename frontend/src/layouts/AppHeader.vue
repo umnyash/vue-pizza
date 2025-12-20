@@ -16,36 +16,35 @@
       </router-link>
     </div>
     <div class="header__user">
-      <router-link :to="{ name: 'profile' }">
-        <picture>
-          <source
-            type="image/webp"
-            srcset="
-              @/assets/img/users/user5.webp    1x,
-              @/assets/img/users/user5@2x.webp 2x
-            "
-          />
+      <template v-if="authStore.isAuthenticated">
+        <router-link :to="{ name: 'profile' }">
           <img
-            src="@/assets/img/users/user5.jpg"
-            srcset="@/assets/img/users/user5@2x.jpg"
-            alt="Василий Ложкин"
+            :src="getPublicImage(user.avatar)"
+            :alt="user.name"
             width="32"
             height="32"
           />
-        </picture>
-        <span>Василий Ложкин</span>
-      </router-link>
-      <router-link :to="{ name: 'home' }" class="header__logout">
-        <span>Выйти</span>
+          <span>{{ user.name }}</span>
+        </router-link>
+        <a href="#" class="header__logout" @click.prevent="authStore.logout">
+          <span>Выйти</span>
+        </a>
+      </template>
+      <router-link v-else class="header__login" :to="{ name: 'login' }">
+        <span>Войти</span>
       </router-link>
     </div>
   </header>
 </template>
 
 <script setup>
-import { useCartStore } from "@/stores";
+import { getPublicImage } from "@/common/helpers/getPublicImage";
+import { useAuthStore, useCartStore } from "@/stores";
 
+const authStore = useAuthStore();
 const cartStore = useCartStore();
+
+const user = authStore.user;
 </script>
 
 <style lang="scss" scoped>

@@ -4,26 +4,18 @@
   </div>
 
   <div class="user">
-    <picture>
-      <source
-        type="image/webp"
-        :srcset="`
-          ${getImage('users/user5@2x.webp')} 1x,
-          ${getImage('users/user5@4x.webp')} 2x
-        `"
-      />
-      <img
-        :src="getImage('users/user5@2x.jpg')"
-        :srcset="`${getImage('users/user5@4x.jpg')} 2x`"
-        alt="Василий Ложкин"
-        width="72"
-        height="72"
-      />
-    </picture>
+    <img
+      :src="getPublicImage(user.avatar)"
+      :alt="user.name"
+      width="72"
+      height="72"
+    />
     <div class="user__name">
-      <span>Василий Ложкин</span>
+      <span>{{ user.name }}</span>
     </div>
-    <p class="user__phone">Контактный телефон: <span>+7 999-999-99-99</span></p>
+    <p class="user__phone">
+      Контактный телефон: <span>{{ user.phone }}</span>
+    </p>
   </div>
 
   <div class="layout__address">
@@ -124,7 +116,11 @@
 </template>
 
 <script setup>
-import { getImage } from "@/common/helpers/getImage";
+import { getPublicImage } from "@/common/helpers/getPublicImage";
+import { useAuthStore } from "@/stores";
+
+const authStore = useAuthStore();
+const user = authStore.user;
 </script>
 
 <style lang="scss" scoped>
