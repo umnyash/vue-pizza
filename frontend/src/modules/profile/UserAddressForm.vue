@@ -57,8 +57,14 @@
     </div>
 
     <div class="address-form__buttons">
-      <button type="button" class="button button--transparent">Удалить</button>
+      <button type="button" class="button button--transparent">Отмена</button>
       <button type="submit" class="button">Сохранить</button>
+      <button
+        type="button"
+        class="button button--transparent address-form__delete-button"
+      >
+        Удалить адрес
+      </button>
     </div>
   </form>
 </template>
@@ -100,5 +106,11 @@
     margin-left: 16px;
     padding: 16px 27px;
   }
+}
+
+.address-form__delete-button.address-form__delete-button {
+  order: -1;
+  margin-left: 0;
+  margin-right: auto;
 }
 </style>
