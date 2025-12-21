@@ -26,18 +26,23 @@
     <user-address-card :address="address" />
   </div>
 
-  <div class="layout__address">
-    <user-address-card />
+  <div v-if="isAddressAdding" class="layout__address">
+    <user-address-card @form-cancel-button-click="isAddressAdding = false" />
   </div>
 
-  <div class="layout__button">
-    <button type="button" class="button button--border">
+  <div v-else class="layout__button">
+    <button
+      type="button"
+      class="button button--border"
+      @click="isAddressAdding = true"
+    >
       Добавить новый адрес
     </button>
   </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { getPublicImage } from "@/common/helpers/getPublicImage";
 import { useAuthStore, useProfileStore } from "@/stores";
 import UserAddressCard from "@/modules/profile/UserAddressCard.vue";
@@ -46,6 +51,7 @@ const authStore = useAuthStore();
 const profileStore = useProfileStore();
 
 const user = authStore.user;
+const isAddressAdding = ref(false);
 </script>
 
 <style lang="scss" scoped>

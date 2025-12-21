@@ -57,7 +57,13 @@
     </div>
 
     <div class="address-form__buttons">
-      <button type="button" class="button button--transparent">Отмена</button>
+      <button
+        type="button"
+        class="button button--transparent"
+        @click="emit('cancelButtonClick')"
+      >
+        Отмена
+      </button>
       <button type="submit" class="button">Сохранить</button>
       <button
         type="button"
@@ -68,6 +74,10 @@
     </div>
   </form>
 </template>
+
+<script setup>
+const emit = defineEmits(["cancelButtonClick"]);
+</script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/ds-system/ds.scss";

@@ -7,7 +7,7 @@
       <b>{{ heading }}</b>
 
       <div v-if="address && !isEditing" class="address-form__edit">
-        <button type="button" class="icon">
+        <button type="button" class="icon" @click="isEditing = true">
           <span class="visually-hidden">Изменить адрес</span>
         </button>
       </div>
@@ -18,7 +18,10 @@
       <small v-if="address.comment">{{ address.comment }}</small>
     </template>
 
-    <user-address-form v-if="!address || isEditing" />
+    <user-address-form
+      v-if="!address || isEditing"
+      @cancel-button-click="handleFormCancelButtonClick"
+    />
   </div>
 </template>
 
@@ -32,6 +35,8 @@ const props = defineProps({
     default: null,
   },
 });
+
+const emit = defineEmits(["formCancelButtonClick"]);
 
 const isEditing = ref(false);
 
@@ -47,6 +52,14 @@ const formatAddress = () => {
     : "";
 
   return `${props.address.street}, д. ${props.address.building}${formattedFlat}`;
+};
+
+const handleFormCancelButtonClick = () => {
+  if (props.address) {
+    isEditing.value = false;
+  } else {
+    emit("formCancelButtonClick");
+  }
 };
 </script>
 
