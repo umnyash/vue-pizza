@@ -1,10 +1,11 @@
 <template>
-  <form>
+  <form @submit.prevent="submitForm">
     <div class="address-form__wrapper">
       <div class="address-form__input">
         <label class="input">
           <span>Название адреса*</span>
           <input
+            v-model="address.name"
             type="text"
             name="addr-name"
             placeholder="Введите название адреса"
@@ -16,6 +17,7 @@
         <label class="input">
           <span>Улица*</span>
           <input
+            v-model="address.street"
             type="text"
             name="addr-street"
             placeholder="Введите название улицы"
@@ -27,6 +29,7 @@
         <label class="input">
           <span>Дом*</span>
           <input
+            v-model="address.building"
             type="text"
             name="addr-house"
             placeholder="Введите номер дома"
@@ -38,6 +41,7 @@
         <label class="input">
           <span>Квартира</span>
           <input
+            v-model="address.flat"
             type="text"
             name="addr-apartment"
             placeholder="Введите № квартиры"
@@ -48,6 +52,7 @@
         <label class="input">
           <span>Комментарий</span>
           <input
+            v-model="address.comment"
             type="text"
             name="addr-comment"
             placeholder="Введите комментарий"
@@ -76,7 +81,43 @@
 </template>
 
 <script setup>
-const emit = defineEmits(["cancelButtonClick"]);
+import { ref } from "vue";
+import { useAuthStore, useProfileStore } from "@/stores";
+
+const emit = defineEmits(["submit", "cancelButtonClick"]);
+
+const props = defineProps({
+  address: {
+    type: Object,
+    default: null,
+  },
+});
+
+const authStore = useAuthStore();
+const profileStore = useProfileStore();
+
+const address = ref(
+  props.address
+    ? { ...props.address }
+    : {
+        name: "",
+        street: "",
+        building: "",
+        flat: "",
+        comment: "",
+        userId: authStore.user.id,
+      },
+);
+
+const submitForm = async () => {
+  if (address.value.id) {
+    await profileStore.updateAddress(address.value);
+    emit("submit");
+  } else {
+    await profileStore.addAddress(address.value);
+    emit("submit");
+  }
+};
 </script>
 
 <style lang="scss" scoped>

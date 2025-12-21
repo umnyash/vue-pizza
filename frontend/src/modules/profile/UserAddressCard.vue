@@ -20,13 +20,15 @@
 
     <user-address-form
       v-if="!address || isEditing"
+      :address="address"
       @cancel-button-click="handleFormCancelButtonClick"
+      @submit="handleFormSubmit"
     />
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import UserAddressForm from "./UserAddressForm.vue";
 
 const props = defineProps({
@@ -36,15 +38,17 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["formCancelButtonClick"]);
+const emit = defineEmits(["formSubmit", "formCancelButtonClick"]);
 
 const isEditing = ref(false);
 
-const heading = props.address
-  ? isEditing.value
-    ? "Редактирование адреса"
-    : props.address.name
-  : "Добавление адреса";
+const heading = computed(() =>
+  props.address
+    ? isEditing.value
+      ? "Редактирование адреса"
+      : props.address.name
+    : "Добавление адреса",
+);
 
 const formatAddress = () => {
   const formattedFlat = props.address.flat
@@ -59,6 +63,14 @@ const handleFormCancelButtonClick = () => {
     isEditing.value = false;
   } else {
     emit("formCancelButtonClick");
+  }
+};
+
+const handleFormSubmit = () => {
+  if (props.address) {
+    isEditing.value = false;
+  } else {
+    emit("formSubmit");
   }
 };
 </script>

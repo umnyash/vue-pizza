@@ -27,7 +27,10 @@
   </div>
 
   <div v-if="isAddressAdding" class="layout__address">
-    <user-address-card @form-cancel-button-click="isAddressAdding = false" />
+    <user-address-card
+      @form-cancel-button-click="isAddressAdding = false"
+      @form-submit="isAddressAdding = false"
+    />
   </div>
 
   <div v-else class="layout__button">
