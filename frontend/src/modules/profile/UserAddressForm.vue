@@ -71,8 +71,10 @@
       </button>
       <button type="submit" class="button">Сохранить</button>
       <button
+        v-if="props.address"
         type="button"
         class="button button--transparent address-form__delete-button"
+        @click="handleRemoveButtonClick"
       >
         Удалить адрес
       </button>
@@ -117,6 +119,10 @@ const submitForm = async () => {
     await profileStore.addAddress(address.value);
     emit("submit");
   }
+};
+
+const handleRemoveButtonClick = async () => {
+  await profileStore.removeAddress(address.value.id);
 };
 </script>
 

@@ -32,5 +32,16 @@ export const useProfileStore = defineStore("profile", {
         this.addresses.splice(addressIndex, 1, address);
       }
     },
+    async removeAddress(addressId) {
+      const response = await resources.address.removeAddress(addressId);
+
+      if (response.__state === "success") {
+        const addressIndex = this.addresses.findIndex(
+          ({ id }) => addressId === id,
+        );
+
+        this.addresses.splice(addressIndex, 1);
+      }
+    },
   },
 });
