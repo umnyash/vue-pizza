@@ -18,8 +18,12 @@
     </p>
   </div>
 
-  <div class="layout__address">
-    <user-address-card address="{}" />
+  <div
+    v-for="address of profileStore.addresses"
+    :key="address.id"
+    class="layout__address"
+  >
+    <user-address-card :address="address" />
   </div>
 
   <div class="layout__address">
@@ -35,10 +39,12 @@
 
 <script setup>
 import { getPublicImage } from "@/common/helpers/getPublicImage";
-import { useAuthStore } from "@/stores";
+import { useAuthStore, useProfileStore } from "@/stores";
 import UserAddressCard from "@/modules/profile/UserAddressCard.vue";
 
 const authStore = useAuthStore();
+const profileStore = useProfileStore();
+
 const user = authStore.user;
 </script>
 

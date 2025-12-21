@@ -4,7 +4,7 @@
     :class="{ 'address-form--opened': !address || isEditing }"
   >
     <div class="address-form__header">
-      <b>Адрес №1</b>
+      <b>{{ heading }}</b>
 
       <div v-if="address && !isEditing" class="address-form__edit">
         <button type="button" class="icon">
@@ -14,8 +14,8 @@
     </div>
 
     <template v-if="address && !isEditing">
-      <p>Невский пр., д. 22, кв. 46</p>
-      <small>Позвоните, пожалуйста, от проходной</small>
+      <p>{{ formatAddress() }}</p>
+      <small v-if="address.comment">{{ address.comment }}</small>
     </template>
 
     <user-address-form v-if="!address || isEditing" />
@@ -26,7 +26,7 @@
 import { ref } from "vue";
 import UserAddressForm from "./UserAddressForm.vue";
 
-defineProps({
+const props = defineProps({
   address: {
     type: Object,
     default: null,
@@ -34,6 +34,20 @@ defineProps({
 });
 
 const isEditing = ref(false);
+
+const heading = props.address
+  ? isEditing.value
+    ? "Редактирование адреса"
+    : props.address.name
+  : "Добавление адреса";
+
+const formatAddress = () => {
+  const formattedFlat = props.address.flat
+    ? `${", "}кв. ${props.address.flat}`
+    : "";
+
+  return `${props.address.street}, д. ${props.address.building}${formattedFlat}`;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -56,8 +70,7 @@ const isEditing = ref(false);
   p {
     @include r-s16-h19;
 
-    margin-top: 0;
-    margin-bottom: 16px;
+    margin: 0;
     padding: 0 16px;
   }
 
@@ -67,6 +80,7 @@ const isEditing = ref(false);
     display: block;
 
     padding: 0 16px;
+    margin-top: 16px;
   }
 }
 
