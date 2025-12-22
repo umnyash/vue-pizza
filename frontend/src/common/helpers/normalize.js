@@ -12,7 +12,7 @@ export const normalizeSize = (size) => ({
 
 export const normalizeIngredient = (ingredient) => ({
   ...ingredient,
-  value: Ingredient[ingredient.id],
+  value: Ingredient[ingredient.name],
 });
 
 export const normalizeSauce = (sauce) => ({

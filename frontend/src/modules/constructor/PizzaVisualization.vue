@@ -8,7 +8,7 @@
             :key="id"
             class="pizza__filling"
             :class="[
-              `pizza__filling--${Ingredient[id]}`,
+              `pizza__filling--${dataStore.getIngredientById(+id).value}`,
               count === IngredientCount.Double && 'pizza__filling--second',
               count === IngredientCount.Triple && 'pizza__filling--third',
             ]"
@@ -21,10 +21,11 @@
 
 <script setup>
 import { computed } from "vue";
-import { DoughType, Sauce, Ingredient, IngredientCount } from "@/common/enums";
-import { usePizzaStore } from "@/stores";
+import { DoughType, Sauce, IngredientCount } from "@/common/enums";
+import { useDataStore, usePizzaStore } from "@/stores";
 import AppDrop from "@/common/components/AppDrop.vue";
 
+const dataStore = useDataStore();
 const pizzaStore = usePizzaStore();
 
 const pizzaClassModifier = computed(
