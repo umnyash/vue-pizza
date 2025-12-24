@@ -6,7 +6,11 @@ export const useProfileStore = defineStore("profile", {
     addresses: [],
     orders: [],
   }),
-  getters: {},
+  getters: {
+    getAddressById(state) {
+      return (id) => state.addresses.find((address) => address.id === id);
+    },
+  },
   actions: {
     setAddresses(addresses) {
       this.addresses = addresses;

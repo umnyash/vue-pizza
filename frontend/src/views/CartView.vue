@@ -1,5 +1,5 @@
 <template>
-  <form action="#" method="post" class="layout-form">
+  <form class="layout-form" @submit.prevent="orderStore.sendOrder">
     <main class="content cart">
       <div class="container">
         <div class="cart__title">
@@ -18,39 +18,68 @@
               <label class="cart-form__select">
                 <span class="cart-form__label">Получение заказа:</span>
 
-                <select name="test" class="select">
-                  <option value="1">Заберу сам</option>
-                  <option value="2">Новый адрес</option>
-                  <option value="3">Дом</option>
+                <select v-model="receiveValue" class="select" name="test">
+                  <option value="pickup">Сам заберу</option>
+                  <option value="new-address">Новый адрес</option>
+                  <option
+                    v-for="address of profileStore.addresses"
+                    :key="address.id"
+                    :value="address.id"
+                  >
+                    {{ address.name }}
+                  </option>
                 </select>
               </label>
 
               <label class="input input--big-label">
                 <span>Контактный телефон:</span>
-                <input type="text" name="tel" placeholder="+7 999-999-99-99" />
+                <input
+                  v-model="orderStore.phone"
+                  type="text"
+                  name="tel"
+                  placeholder="+7 999-999-99-99"
+                  required
+                />
               </label>
 
-              <div class="cart-form__address">
+              <div v-if="orderStore.isDelivery" class="cart-form__address">
                 <span class="cart-form__label">Новый адрес:</span>
 
                 <div class="cart-form__input">
                   <label class="input">
                     <span>Улица*</span>
-                    <input type="text" name="street" />
+                    <input
+                      v-model="orderStore.address.street"
+                      type="text"
+                      name="street"
+                      :required="orderStore.isNewAddress"
+                      :disabled="!orderStore.isNewAddress"
+                    />
                   </label>
                 </div>
 
                 <div class="cart-form__input cart-form__input--small">
                   <label class="input">
                     <span>Дом*</span>
-                    <input type="text" name="house" />
+                    <input
+                      v-model="orderStore.address.building"
+                      type="text"
+                      name="house"
+                      :required="orderStore.isNewAddress"
+                      :disabled="!orderStore.isNewAddress"
+                    />
                   </label>
                 </div>
 
                 <div class="cart-form__input cart-form__input--small">
                   <label class="input">
                     <span>Квартира</span>
-                    <input type="text" name="apartment" />
+                    <input
+                      v-model="orderStore.address.flat"
+                      type="text"
+                      name="apartment"
+                      :disabled="!orderStore.isNewAddress"
+                    />
                   </label>
                 </div>
               </div>
@@ -84,11 +113,33 @@
 </template>
 
 <script setup>
-import { useCartStore } from "@/stores";
+import { computed } from "vue";
+import { useProfileStore, useCartStore, useOrderStore } from "@/stores";
 import CartPizzasList from "@/modules/cart/CartPizzasList.vue";
 import CartAddonsList from "@/modules/cart/CartAddonsList.vue";
 
+const profileStore = useProfileStore();
 const cartStore = useCartStore();
+const orderStore = useOrderStore();
+
+const receiveValue = computed({
+  get() {
+    return orderStore.isPickup
+      ? "pickup"
+      : orderStore.isNewAddress
+        ? "new-address"
+        : orderStore.addressId;
+  },
+  set(value) {
+    if (value === "pickup") {
+      orderStore.selectPickupReceiveMethod();
+    } else if (value === "new-address") {
+      orderStore.selectDeliveryReceiveMethod();
+    } else {
+      orderStore.selectDeliveryReceiveMethod(value);
+    }
+  },
+});
 </script>
 
 <style lang="scss">
@@ -203,6 +254,7 @@ const cartStore = useCartStore();
   margin: 0;
   padding: 8px 16px;
   padding-right: 30px;
+  max-width: 180px;
 
   cursor: pointer;
   transition: 0.3s;
