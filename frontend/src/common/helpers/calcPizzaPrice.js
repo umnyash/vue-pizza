@@ -11,15 +11,28 @@ export const calcPizzaPrice = (pizza) => {
     (sauce) => sauce.id === pizza.sauceId,
   ).price;
 
-  const ingredientsPrice = dataStore.ingredients.reduce((acc, ingredient) => {
-    const ingredientCount = pizza.ingredientsCounts[ingredient.id];
+  let ingredientsPrice = 0;
 
-    if (ingredientCount) {
-      acc += ingredient.price * ingredientCount;
-    }
+  if (pizza.ingredientsCounts) {
+    ingredientsPrice = dataStore.ingredients.reduce((acc, ingredient) => {
+      const ingredientCount = pizza.ingredientsCounts[ingredient.id];
 
-    return acc;
-  }, 0);
+      if (ingredientCount) {
+        acc += ingredient.price * ingredientCount;
+      }
+
+      return acc;
+    }, 0);
+  } else if (pizza.ingredients) {
+    ingredientsPrice = pizza.ingredients.reduce(
+      (acc, { ingredientId, quantity }) => {
+        const ingredient = dataStore.getIngredientById(ingredientId);
+        acc += ingredient.price * quantity;
+        return acc;
+      },
+      0,
+    );
+  }
 
   const sizeMultiplier = dataStore.sizes.find(
     (size) => size.id === pizza.sizeId,
