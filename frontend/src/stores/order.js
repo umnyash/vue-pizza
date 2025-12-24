@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ReceiveMethod } from "@/common/enums";
+import { formatAddress } from "@/common/helpers/formatAddress";
 import { useAuthStore, useProfileStore, useCartStore } from "@/stores";
 import resources from "@/services/resources";
 
@@ -104,7 +105,23 @@ export const useOrderStore = defineStore("order", {
         }),
       );
 
-      resources.order.createOrder(order);
+      const response = await resources.order.createOrder(order);
+
+      if (response.__state === "success") {
+        if (!authStore.user || !this.isNewAddress) {
+          return;
+        }
+
+        const newAddress = {
+          ...this.address,
+          id: response.data.addressId,
+          name: formatAddress(this.address),
+          userId: authStore.user.id,
+        };
+
+        const profileStore = useProfileStore();
+        profileStore.addresses.push(newAddress);
+      }
     },
   },
 });
