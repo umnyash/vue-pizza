@@ -14,7 +14,7 @@
     </div>
 
     <template v-if="address && !isEditing">
-      <p>{{ formatAddress() }}</p>
+      <p>{{ formatAddress(address) }}</p>
       <small v-if="address.comment">{{ address.comment }}</small>
     </template>
 
@@ -29,6 +29,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { formatAddress } from "@/common/helpers/formatAddress";
 import UserAddressForm from "./UserAddressForm.vue";
 
 const props = defineProps({
@@ -49,14 +50,6 @@ const heading = computed(() =>
       : props.address.name
     : "Добавление адреса",
 );
-
-const formatAddress = () => {
-  const formattedFlat = props.address.flat
-    ? `${", "}кв. ${props.address.flat}`
-    : "";
-
-  return `${props.address.street}, д. ${props.address.building}${formattedFlat}`;
-};
 
 const handleFormCancelButtonClick = () => {
   if (props.address) {
