@@ -146,6 +146,19 @@ export const useOrderStore = defineStore("order", {
         profileStore.orders.push(order);
       }
     },
+    async deleteOrder(orderId) {
+      const profileStore = useProfileStore();
+
+      const response = await resources.order.removeOrder(orderId);
+
+      if (response.__state === "success") {
+        const orderIndex = profileStore.orders.findIndex(
+          ({ id }) => id === orderId,
+        );
+
+        profileStore.orders.splice(orderIndex, 1);
+      }
+    },
     setOrder(order) {
       const cartStore = useCartStore();
       cartStore.setOrder(order);
