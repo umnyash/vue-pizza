@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { calcPizzaPrice } from "@/common/helpers/calcPizzaPrice";
 import { useDataStore } from "@/stores";
 
 export const useCartStore = defineStore("cart", {
@@ -75,6 +76,39 @@ export const useCartStore = defineStore("cart", {
         this.addonsCounts[id] = count;
       } else {
         delete this.addonsCounts[id];
+      }
+    },
+    setOrder(order) {
+      this.pizzas = order.orderPizzas.map((pizza) => {
+        const adaptedPizza = {
+          id: pizza.id,
+          name: pizza.name,
+          doughId: pizza.doughId,
+          sizeId: pizza.sizeId,
+          sauceId: pizza.sauceId,
+          ingredientsCounts: pizza.ingredients.reduce(
+            (acc, { ingredientId, quantity }) => {
+              acc[ingredientId] = quantity;
+              return acc;
+            },
+            {},
+          ),
+          quantity: pizza.quantity,
+        };
+
+        adaptedPizza.price = calcPizzaPrice(adaptedPizza);
+
+        return adaptedPizza;
+      });
+
+      if (order.orderMisc) {
+        this.addonsCounts = order.orderMisc.reduce(
+          (acc, { miscId, quantity }) => {
+            acc[miscId] = quantity;
+            return acc;
+          },
+          {},
+        );
       }
     },
   },

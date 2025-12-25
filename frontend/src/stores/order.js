@@ -49,15 +49,18 @@ export const useOrderStore = defineStore("order", {
         this.clearAddress();
       }
     },
+    setAddress(address) {
+      this.address.street = address.street;
+      this.address.building = address.building;
+      this.address.flat = address.flat;
+      this.address.comment = address.comment;
+    },
     setAddressById(id) {
       const profileStore = useProfileStore();
       const address = profileStore.getAddressById(id);
 
       this.addressId = address.id;
-      this.address.street = address.street;
-      this.address.building = address.building;
-      this.address.flat = address.flat;
-      this.address.comment = address.comment;
+      this.setAddress(address);
     },
     clearAddress() {
       this.addressId = null;
@@ -141,6 +144,26 @@ export const useOrderStore = defineStore("order", {
         }
 
         profileStore.orders.push(order);
+      }
+    },
+    setOrder(order) {
+      const cartStore = useCartStore();
+      cartStore.setOrder(order);
+
+      if (order.orderAddress) {
+        this.receiveMethod = ReceiveMethod.Delivery;
+        this.setAddress(order.orderAddress);
+
+        const profileStore = useProfileStore();
+
+        const isAddressExist = Boolean(
+          profileStore.getAddressById(order.addressId),
+        );
+
+        this.addressId = isAddressExist ? order.addressId : null;
+      } else {
+        this.receiveMethod = ReceiveMethod.Pickup;
+        this.clearAddress();
       }
     },
   },

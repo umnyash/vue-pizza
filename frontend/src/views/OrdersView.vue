@@ -23,7 +23,13 @@
         <button type="button" class="button button--border">Удалить</button>
       </div>
       <div class="order__button">
-        <button type="button" class="button">Повторить</button>
+        <button
+          type="button"
+          class="button"
+          @click="handleRepeatOrderButtonClick(order)"
+        >
+          Повторить
+        </button>
       </div>
     </div>
 
@@ -67,12 +73,20 @@
 </template>
 
 <script setup>
+import { useRouter } from "vue-router";
 import { getPublicImage } from "@/common/helpers/getPublicImage";
 import { calcOrderPrice } from "@/common/helpers/calcOrderPrice";
-import { useProfileStore } from "@/stores";
+import { useProfileStore, useOrderStore } from "@/stores";
 import AppPizzaInfo from "@/common/components/AppPizzaInfo.vue";
 
+const router = useRouter();
 const profileStore = useProfileStore();
+const orderStore = useOrderStore();
+
+const handleRepeatOrderButtonClick = (order) => {
+  orderStore.setOrder(order);
+  router.push({ name: "cart" });
+};
 </script>
 
 <style lang="scss" scoped>
