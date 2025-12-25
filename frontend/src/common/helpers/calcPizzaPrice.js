@@ -26,7 +26,7 @@ export const calcPizzaPrice = (pizza) => {
   } else if (pizza.ingredients) {
     ingredientsPrice = pizza.ingredients.reduce(
       (acc, { ingredientId, quantity }) => {
-        const ingredient = dataStore.getIngredientById(ingredientId);
+        const ingredient = dataStore.getIngredientById(+ingredientId);
         acc += ingredient.price * quantity;
         return acc;
       },

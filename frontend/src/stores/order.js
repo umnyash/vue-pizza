@@ -108,19 +108,39 @@ export const useOrderStore = defineStore("order", {
       const response = await resources.order.createOrder(order);
 
       if (response.__state === "success") {
-        if (!authStore.user || !this.isNewAddress) {
+        if (!authStore.user) {
           return;
         }
 
-        const newAddress = {
-          ...this.address,
-          id: response.data.addressId,
-          name: formatAddress(this.address),
-          userId: authStore.user.id,
-        };
-
         const profileStore = useProfileStore();
-        profileStore.addresses.push(newAddress);
+
+        // Сохранение адреса в стора
+        if (this.isDelivery && this.isNewAddress) {
+          const newAddress = {
+            ...this.address,
+            id: response.data.addressId,
+            name: formatAddress(this.address),
+            userId: authStore.user.id,
+          };
+
+          profileStore.addresses.push(newAddress);
+        }
+
+        // Сохранение заказа в стор
+        order.id = response.data.id;
+        order.orderPizzas = order.pizzas;
+
+        if (order.address) {
+          order.orderAddress = profileStore.getAddressById(
+            response.data.addressId,
+          );
+        }
+
+        if (order.misc.length) {
+          order.orderMisc = order.misc;
+        }
+
+        profileStore.orders.push(order);
       }
     },
   },

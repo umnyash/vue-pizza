@@ -29,7 +29,7 @@ export const useProfileStore = defineStore("profile", {
         })),
         expandedMisc: order.orderMisc?.map((misc) => ({
           ...misc,
-          data: dataStore.getAddonById(misc.miscId),
+          data: dataStore.getAddonById(+misc.miscId),
         })),
       }));
     },
