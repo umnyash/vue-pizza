@@ -128,7 +128,7 @@ const handleFormSubmit = () => {
   border-radius: 50%;
   outline: none;
   background-color: $white;
-  background-image: url("@/assets/img/edit.svg");
+  background-image: url("/api/public/img/edit.svg");
   background-repeat: no-repeat;
   background-position: center;
 

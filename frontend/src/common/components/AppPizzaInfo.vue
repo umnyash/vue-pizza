@@ -1,7 +1,7 @@
 <template>
   <div class="product">
     <img
-      :src="getImage('product.svg')"
+      :src="getPublicImage('/public/img/product.svg')"
       class="product__img"
       width="56"
       height="56"
@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { getImage } from "@/common/helpers/getImage";
+import { getPublicImage } from "@/common/helpers/getPublicImage";
 
 const props = defineProps({
   pizza: {

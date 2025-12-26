@@ -47,14 +47,14 @@ const emit = defineEmits(["closeButtonClick"]);
     top: 15px;
     left: 15px;
 
-    background-image: url("@/assets/img/filling/ananas.svg");
+    background-image: url("/api/public/img/filling/ananas.svg");
   }
 
   &::after {
     right: 15px;
     bottom: 15px;
 
-    background-image: url("@/assets/img/filling/tomatoes.svg");
+    background-image: url("/api/public/img/filling/tomatoes.svg");
   }
 
   p {

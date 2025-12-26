@@ -275,7 +275,7 @@ const handleFormSubmit = async () => {
   border-radius: 8px;
   outline: none;
   background-color: $silver-100;
-  background-image: url("@/assets/img/select.svg");
+  background-image: url("/api/public/img/select.svg");
   background-repeat: no-repeat;
   background-position: right 8px center;
 
