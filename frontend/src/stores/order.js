@@ -69,6 +69,11 @@ export const useOrderStore = defineStore("order", {
       this.address.flat = "";
       this.address.comment = "";
     },
+    reset() {
+      const cartStore = useCartStore();
+      cartStore.$reset();
+      this.$reset();
+    },
     async sendOrder() {
       const authStore = useAuthStore();
       const cartStore = useCartStore();

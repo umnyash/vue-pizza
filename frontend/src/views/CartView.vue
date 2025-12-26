@@ -148,6 +148,7 @@ const handleFormSubmit = async () => {
 
   if (response.__state === "success") {
     router.push({ name: "order-success" });
+    orderStore.reset();
   }
 };
 </script>
