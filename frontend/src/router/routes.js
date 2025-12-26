@@ -40,4 +40,10 @@ export const routes = [
       },
     ],
   },
+  {
+    path: "/order-success",
+    name: "order-success",
+    component: () => import("@/views/OrderSuccessView.vue"),
+    meta: { layout: "AppBaseLayout" },
+  },
 ];
