@@ -110,11 +110,7 @@ export const useOrderStore = defineStore("order", {
 
       const response = await resources.order.createOrder(order);
 
-      if (response.__state === "success") {
-        if (!authStore.user) {
-          return;
-        }
-
+      if (authStore.user && response.__state === "success") {
         const profileStore = useProfileStore();
 
         // Сохранение адреса в стора
@@ -145,6 +141,8 @@ export const useOrderStore = defineStore("order", {
 
         profileStore.orders.push(order);
       }
+
+      return response;
     },
     async deleteOrder(orderId) {
       const profileStore = useProfileStore();

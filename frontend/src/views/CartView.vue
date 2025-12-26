@@ -1,5 +1,5 @@
 <template>
-  <form class="layout-form" @submit.prevent="orderStore.sendOrder">
+  <form class="layout-form" @submit.prevent="handleFormSubmit">
     <main class="content cart">
       <div class="container">
         <div class="cart__title">
@@ -114,10 +114,12 @@
 
 <script setup>
 import { computed } from "vue";
+import { useRouter } from "vue-router";
 import { useProfileStore, useCartStore, useOrderStore } from "@/stores";
 import CartPizzasList from "@/modules/cart/CartPizzasList.vue";
 import CartAddonsList from "@/modules/cart/CartAddonsList.vue";
 
+const router = useRouter();
 const profileStore = useProfileStore();
 const cartStore = useCartStore();
 const orderStore = useOrderStore();
@@ -140,6 +142,14 @@ const receiveValue = computed({
     }
   },
 });
+
+const handleFormSubmit = async () => {
+  const response = await orderStore.sendOrder();
+
+  if (response.__state === "success") {
+    router.push({ name: "order-success" });
+  }
+};
 </script>
 
 <style lang="scss">
