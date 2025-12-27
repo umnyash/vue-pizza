@@ -1,12 +1,16 @@
 <template>
-  <app-modal @close-button-click="closeModal">
-    <app-alert
-      heading="Спасибо за заказ"
-      text="Мы начали готовить Ваш заказ, скоро привезём его вам ;)"
-      button-text="Отлично, я жду!"
-      @button-click="closeModal"
-    />
-  </app-modal>
+  <div>
+    <transition name="fade" appear>
+      <app-modal @close-button-click="closeModal">
+        <app-alert
+          heading="Спасибо за заказ"
+          text="Мы начали готовить Ваш заказ, скоро привезём его вам ;)"
+          button-text="Отлично, я жду!"
+          @button-click="closeModal"
+        />
+      </app-modal>
+    </transition>
+  </div>
 </template>
 
 <script setup>

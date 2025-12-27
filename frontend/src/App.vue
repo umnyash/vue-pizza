@@ -1,6 +1,13 @@
 <template>
   <app-layout>
-    <router-view v-if="isAuthChecked && dataStore.isDataLoaded" />
+    <router-view
+      v-if="isAuthChecked && dataStore.isDataLoaded"
+      v-slot="{ Component }"
+    >
+      <transition name="slide" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </app-layout>
 </template>
 

@@ -3,16 +3,18 @@
     <app-drop @drop="pizzaStore.increaseIngredientCount">
       <div class="pizza" :class="pizzaClassModifier">
         <div class="pizza__wrapper">
-          <div
-            v-for="(count, id) in pizzaStore.ingredientsCounts"
-            :key="id"
-            class="pizza__filling"
-            :class="[
-              `pizza__filling--${dataStore.getIngredientById(+id).value}`,
-              count === IngredientCount.Double && 'pizza__filling--second',
-              count === IngredientCount.Triple && 'pizza__filling--third',
-            ]"
-          />
+          <transition-group name="scale">
+            <div
+              v-for="(count, id) in pizzaStore.ingredientsCounts"
+              :key="id"
+              class="pizza__filling"
+              :class="[
+                `pizza__filling--${dataStore.getIngredientById(+id).value}`,
+                count === IngredientCount.Double && 'pizza__filling--second',
+                count === IngredientCount.Triple && 'pizza__filling--third',
+              ]"
+            />
+          </transition-group>
         </div>
       </div>
     </app-drop>
